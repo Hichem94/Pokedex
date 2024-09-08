@@ -160,5 +160,5 @@ def make_prediction(model, img_path):
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
     class_names = ['Bulbasaur', 'Charmander', 'Mewtwo', 'Pikachu', 'Squirtle']
-    result_string = "Likely {} with {:.2f}% confidence.".format(class_names[np.argmax(score)], 100 * np.max(score))
-    print(result_string)
+    #result_string = "Likely {} with {:.2f}% confidence.".format(class_names[np.argmax(score)], 100 * np.max(score))
+    return class_names[np.argmax(score)]
