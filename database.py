@@ -35,31 +35,51 @@ conn.commit()
 
 
 # Données à insérer (tous les types de Pokémon)
-types = [
-    (1, 'Eau', 'Les Pokémon de type Eau sont forts contre les Pokémon de type Feu et Vol.'),
-    (2, 'Feu', 'Les Pokémon de type Feu sont forts contre les Pokémon de type Plante et Insecte.'),
-    (3, 'Plante', 'Les Pokémon de type Plante sont forts contre les Pokémon de type Eau et Roche.'),
-    (4, 'Électrik', 'Les Pokémon de type Électrik sont forts contre les Pokémon de type Eau et Vol.'),
-    (5, 'Normal', 'Les Pokémon de type Normal ne sont forts ni faibles contre aucun type particulier.'),
-    (6, 'Combat', 'Les Pokémon de type Combat sont forts contre les Pokémon de type Roche et Glace.'),
-    (7, 'Poison', 'Les Pokémon de type Poison sont forts contre les Pokémon de type Plante et Insecte.'),
-    (8, 'Terre', 'Les Pokémon de type Terre sont forts contre les Pokémon de type Feu, Électrik et Roche.'),
-    (9, 'Vol', 'Les Pokémon de type Vol sont forts contre les Pokémon de type Plante et Insecte.'),
-    (10, 'Psy', 'Les Pokémon de type Psy sont forts contre les Pokémon de type Combat et Poison.'),
-    (11, 'Insecte', 'Les Pokémon de type Insecte sont forts contre les Pokémon de type Plante et Psy.'),
-    (12, 'Roche', 'Les Pokémon de type Roche est fort contre les Pokémon de type Feu, Glace et Vol.'),
-    (13, 'Ciel', 'Les Pokémon de type Ciel est fort contre les Pokémon de type Combat et Psy.'),
-    (14, 'Glace', 'Les Pokémon de type Glace est fort contre les Pokémon de type Plante, Vol et Dragon.'),
-    (15, 'Dragon', 'Les Pokémon de type Dragon est fort contre les Pokémon de type Dragon.'),
-    (16, 'Ténèbres', 'Les Pokémon de type Ténèbres est fort contre les Pokémon de type Psy et Fantôme.'),
-    (17, 'Fée', 'Les Pokémon de type Fée est fort contre les Pokémon de type Combat, Dragon et Ténèbres.'),
-    (18, 'Acier', 'Les Pokémon de type Acier est fort contre les Pokémon de type Glace, Roche et Fée.')
+types_fr = [
+    (1, 'eau', 'Les Pokémon de type Eau sont forts contre les Pokémon de type Feu et Vol.'),
+    (2, 'feu', 'Les Pokémon de type Feu sont forts contre les Pokémon de type Plante et Insecte.'),
+    (3, 'plante', 'Les Pokémon de type Plante sont forts contre les Pokémon de type Eau et Roche.'),
+    (4, 'électrik', 'Les Pokémon de type Électrik sont forts contre les Pokémon de type Eau et Vol.'),
+    (5, 'normal', 'Les Pokémon de type Normal ne sont forts ni faibles contre aucun type particulier.'),
+    (6, 'combat', 'Les Pokémon de type Combat sont forts contre les Pokémon de type Roche et Glace.'),
+    (7, 'poison', 'Les Pokémon de type Poison sont forts contre les Pokémon de type Plante et Insecte.'),
+    (8, 'terre', 'Les Pokémon de type Terre sont forts contre les Pokémon de type Feu, Électrik et Roche.'),
+    (9, 'vol', 'Les Pokémon de type Vol sont forts contre les Pokémon de type Plante et Insecte.'),
+    (10, 'psy', 'Les Pokémon de type Psy sont forts contre les Pokémon de type Combat et Poison.'),
+    (11, 'insecte', 'Les Pokémon de type Insecte sont forts contre les Pokémon de type Plante et Psy.'),
+    (12, 'roche', 'Les Pokémon de type Roche est fort contre les Pokémon de type Feu, Glace et Vol.'),
+    (13, 'ciel', 'Les Pokémon de type Ciel est fort contre les Pokémon de type Combat et Psy.'),
+    (14, 'glace', 'Les Pokémon de type Glace est fort contre les Pokémon de type Plante, Vol et Dragon.'),
+    (15, 'dragon', 'Les Pokémon de type Dragon est fort contre les Pokémon de type Dragon.'),
+    (16, 'ténèbres', 'Les Pokémon de type Ténèbres est fort contre les Pokémon de type Psy et Fantôme.'),
+    (17, 'fée', 'Les Pokémon de type Fée est fort contre les Pokémon de type Combat, Dragon et Ténèbres.'),
+    (18, 'acier', 'Les Pokémon de type Acier est fort contre les Pokémon de type Glace, Roche et Fée.')
+]
+types_en = [
+    (1, 'water', 'Les Pokémon de type Eau sont forts contre les Pokémon de type Feu et Vol.'),
+    (2, 'fire', 'Les Pokémon de type Feu sont forts contre les Pokémon de type Plante et Insecte.'),
+    (3, 'grass', 'Les Pokémon de type Plante sont forts contre les Pokémon de type Eau et Roche.'),
+    (4, 'electric', 'Les Pokémon de type Électrik sont forts contre les Pokémon de type Eau et Vol.'),
+    (5, 'normal', 'Les Pokémon de type Normal ne sont forts ni faibles contre aucun type particulier.'),
+    (6, 'fighting', 'Les Pokémon de type Combat sont forts contre les Pokémon de type Roche et Glace.'),
+    (7, 'poison', 'Les Pokémon de type Poison sont forts contre les Pokémon de type Plante et Insecte.'),
+    (8, 'ground', 'Les Pokémon de type Terre sont forts contre les Pokémon de type Feu, Électrik et Roche.'),
+    (9, 'flying', 'Les Pokémon de type Vol sont forts contre les Pokémon de type Plante et Insecte.'),
+    (10, 'psychic', 'Les Pokémon de type Psy sont forts contre les Pokémon de type Combat et Poison.'),
+    (11, 'bug', 'Les Pokémon de type Insecte sont forts contre les Pokémon de type Plante et Psy.'),
+    (12, 'rock', 'Les Pokémon de type Roche est fort contre les Pokémon de type Feu, Glace et Vol.'),
+    (13, 'fairy', 'Les Pokémon de type Ciel est fort contre les Pokémon de type Combat et Psy.'),  # Correction : Ciel -> Fairy
+    (14, 'ice', 'Les Pokémon de type Glace est fort contre les Pokémon de type Plante, Vol et Dragon.'),
+    (15, 'dragon', 'Les Pokémon de type Dragon est fort contre les Pokémon de type Dragon.'),
+    (16, 'dark', 'Les Pokémon de type Ténèbres est contre les Pokémon de type Psy et Fantôme.'),
+    (17, 'fairy', 'Les Pokémon de type Fée est contre les Pokémon de type Combat, Dragon et Ténèbres.'),
+    (18, 'steel', 'Les Pokémon de type Acier est contre les Pokémon de type Glace, Roche et Fée.')
 ]
 sql = '''
     INSERT OR IGNORE INTO type (id_type, nom_type, description)
     VALUES (?, ?, ?)
 '''
-cursor.executemany(sql, types)
+cursor.executemany(sql, types_en)
 conn.commit()
 
 cursor.execute('''
@@ -92,8 +112,9 @@ def ajouter_pokemon(pokemon_info):
     pokemon_id = cursor.lastrowid
 
     # Récupérer les ID de/des type(s) du pokemon
-    types_du_pokemon = pokemon_info['types']
-    cursor.execute(f"SELECT type_id FROM type WHERE nom_type in {types_du_pokemon}")
+    types_du_pokemon = tuple(pokemon_info['types'])
+
+    cursor.execute(f"SELECT id_type FROM type WHERE nom_type IN ({','.join('?' * len(types_du_pokemon))})", types_du_pokemon)
     type_ids = [row[0] for row in cursor.fetchall()]
 
     # Insertion des type-Pokémon
@@ -109,7 +130,7 @@ def lister_tous_les_pokemons():
     conn = sqlite3.connect('pokedex.db')
     cursor = conn.cursor()
 
-    cursor.execute("SELECT nom, taille, categorie, poids, type, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
+    cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
                     FROM mypokemons")
 
     conn.commit()
@@ -118,15 +139,16 @@ def lister_tous_les_pokemons():
     return pokemons
 
 
-# Fonction pour lister tous les Pokémon
+# Fonction pour lister un Pokémon
 def lister_un_pokemon(pokemon_name):
     conn = sqlite3.connect('pokedex.db')
     cursor = conn.cursor()
 
-    cursor.execute("SELECT nom, taille, categorie, poids, type, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
+    # Utilisation de paramètres de requête pour éviter l'injection SQL
+    cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
                     FROM mypokemons\
-                    WHERE nom={pokemon_name}")
-
+                    WHERE nom=?", (pokemon_name,))
+    
     pokemon = cursor.fetchall()
 
     conn.close()

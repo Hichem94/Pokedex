@@ -10,11 +10,10 @@ def make_pokemon(pokemon_info):
     taille    = pokemon_info['taille']
     categorie = pokemon_info['categorie']
     poids     = pokemon_info['poids']
-    type      = pokemon_info['type']
-    stats     = pokemon_info['stats_de_base']
+    stats     = pokemon_info['stats']
     image_path= pokemon_info['image_path']
 
-    pokemon = Pokemon(nom, taille, categorie, poids, type, stats, image_path)
+    pokemon = Pokemon(nom, taille, categorie, poids, stats, image_path)
 
     return pokemon
 
@@ -42,8 +41,14 @@ if __name__ == "__main__":
 
 
     ajouter_pokemon(pokemon_info)
+    print("###################################\n")
+    print("\n")
     print(lister_tous_les_pokemons())
-    print(lister_un_pokemon())
+    print("###################################\n")
+    print("\n")
+    print(lister_un_pokemon('bulbasaur'))
+    print("###################################\n")
+    print("\n")
 
 
     # Make pokemon
