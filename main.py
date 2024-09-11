@@ -1,7 +1,6 @@
 from model import *
-from gemini import Gemini
 from pokemon import Pokemon
-import ast
+from api_pokemon import get_pokemon_info
 
 
 def make_pokemon(pokemon_info):
@@ -11,8 +10,9 @@ def make_pokemon(pokemon_info):
     poids     = pokemon_info['poids']
     type      = pokemon_info['type']
     stats     = pokemon_info['stats_de_base']
+    image_path= pokemon_info['image_path']
 
-    pokemon = Pokemon(nom, taille, categorie, poids, type, stats)
+    pokemon = Pokemon(nom, taille, categorie, poids, type, stats, image_path)
 
     return pokemon
 
@@ -30,13 +30,11 @@ if __name__ == "__main__":
         print("Erreur lors du chargement du modèle:", e)
 
 
-    gemini  = Gemini()
-
     # Prediction
     pokemon_predict = make_prediction(model, sys.argv[1])
     
     # Get pokemon info
-    pokemon_info = gemini.get_info(pokemon_predict)
+    pokemon_info = get_pokemon_info(pokemon_predict)
 
     # Make pokemon
     pokemon = make_pokemon(pokemon_info)
