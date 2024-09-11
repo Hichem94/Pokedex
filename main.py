@@ -1,8 +1,10 @@
 from model import *
 from pokemon import Pokemon
 from api_pokemon import get_pokemon_info
+from database import ajouter_pokemon, lister_tous_les_pokemons, lister_un_pokemon
 
 
+# Construire une instance de Pokemon
 def make_pokemon(pokemon_info):
     nom       = pokemon_info['nom']
     taille    = pokemon_info['taille']
@@ -17,6 +19,8 @@ def make_pokemon(pokemon_info):
     return pokemon
 
 
+
+# MAIN
 if __name__ == "__main__":
 
     # Entrainer le modèle
@@ -36,8 +40,13 @@ if __name__ == "__main__":
     # Get pokemon info
     pokemon_info = get_pokemon_info(pokemon_predict)
 
+
+    ajouter_pokemon(pokemon_info)
+    print(lister_tous_les_pokemons())
+    print(lister_un_pokemon())
+
+
     # Make pokemon
     pokemon = make_pokemon(pokemon_info)
-
     # Afficher
     pokemon.toString()
