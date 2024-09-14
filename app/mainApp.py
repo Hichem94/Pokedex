@@ -2,7 +2,6 @@ import cv2
 import time
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, NoTransition, RiseInTransition
 from kivy.graphics import Color, Rectangle
 from kivy.core.window import Window
@@ -10,6 +9,8 @@ from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.properties import StringProperty
 from kivy.animation import Animation
+from kivy.uix.gridlayout import GridLayout
+from kivy.clock import Clock
 
 
 
@@ -24,7 +25,8 @@ from database import *
 
 
 
-# Classe pour le bouton rond avec une image personnalisée
+from kivy.clock import Clock
+
 class RoundButton(Button):
     source = StringProperty('')
 
@@ -35,23 +37,31 @@ class RoundButton(Button):
         self.background_down = ''
         self.background_color = (0, 0, 0, 0)
         self.size_hint = (None, None)
+        
+        # Ajouter un bind pour ajuster la taille de l'image lorsque le bouton change de taille
+        self.bind(size=self.update_img_size, pos=self.update_img_pos)
 
-        # Ajouter l'image comme enfant du bouton
-        self.image = Image(source=self.source, size=self.size, pos=self.pos)
-        self.add_widget(self.image)
+    def on_size(self, *args):
+        # Planifier l'ajout de l'image après l'initialisation du bouton
+        Clock.schedule_once(self.create_image)
 
-        # Assurer que l'image suit les modifications de position/taille du bouton
-        self.bind(pos=self.update_img_pos, size=self.update_img_size)
+    def create_image(self, *args):
+        if not hasattr(self, 'image'):
+            self.image = Image(source=self.source, size=self.size, pos=self.pos)
+            self.add_widget(self.image)
+        self.update_img_size()
 
     def update_img_pos(self, *args):
-        self.image.pos = self.pos
+        if hasattr(self, 'image'):
+            self.image.pos = self.pos
 
     def update_img_size(self, *args):
-        self.image.size = self.size
+        if hasattr(self, 'image'):
+            # Mettre à jour la taille de l'image tout en conservant les proportions
+            self.image.size = self.size
+            self.image.texture_size = self.image.texture_size  # Pour éviter la perte de proportion
 
 
-
-# Classe principale de l'application
 class MainApp(App):
     def build(self):
         self.sm = ScreenManager()
@@ -62,51 +72,50 @@ class MainApp(App):
         self.sm.add_widget(ProfilScreen(name='profil'))
         self.sm.add_widget(PokemonDetailsPage(name='pokemon_info'))
 
-
         layout = FloatLayout()
 
         layout.add_widget(self.sm)
 
-        # Créer la barre de navigation
-        nav_bar = BoxLayout(size_hint=(1, 0.1),
-                            pos_hint={'x': 0, 'y': 0},
-                            orientation='horizontal',
-                            padding=[20, 0, 0, 10],
-                            spacing=70)
+        # Créer la barre de navigation avec GridLayout
+        nav_bar = GridLayout(cols=4,  # Nombre de colonnes égal au nombre de boutons
+                            size_hint=(1, None),
+                            height=80,  # Hauteur de la barre de navigation
+                            padding=[10, 10],  # Espacement interne
+                            spacing=45)  # Espacement entre les boutons
 
         with nav_bar.canvas.before:
-            Color(1, 1, 1, 1) #RGBA
-            self.rect = Rectangle(size=(Window.width, nav_bar.height), pos=(0, 0)) # Le rectangle blanc de la nav bar
+            Color(1, 1, 1, 1)  # Couleur de fond blanche
+            self.rect = Rectangle(size=(Window.width, nav_bar.height), pos=(0, 0))  # Rectangle de la nav bar
 
             # Ombre au-dessus de la barre de navigation
-            Color(0, 0, 0, 0.3) 
-            self.shadow = Rectangle(size=(Window.width, 5), pos=(0, nav_bar.height))  # Taille et position de l'ombre
+            Color(0, 0, 0, 0.3)
+            self.shadow = Rectangle(size=(Window.width, 5), pos=(0, nav_bar.height))  # Ombre au-dessus
 
         # Lier la taille du rectangle à la taille de la nav_bar
         nav_bar.bind(size=lambda instance, value: setattr(self.rect, 'size', (Window.width, nav_bar.height)))
         
         # Mise à jour de la taille du rectangle et de l'ombre lorsque la fenêtre change
         def update_rect(instance, value):
-            self.rect.size   = (Window.width, nav_bar.height)  # Mettre à jour la taille du rectangle blanc
-            self.shadow.size = (Window.width, 5)               # L'ombre garde toujours la même hauteur
-            self.shadow.pos  = (0, nav_bar.height)             # Placer l'ombre juste au-dessus de la barre de navigation
+            self.rect.size = (Window.width, nav_bar.height)  # Mettre à jour la taille du rectangle blanc
+            self.shadow.size = (Window.width, 5)             # L'ombre garde toujours la même hauteur
+            self.shadow.pos = (0, nav_bar.height)            # Placer l'ombre juste au-dessus de la barre de navigation
 
         nav_bar.bind(size=update_rect)
 
-        # Taille des boutons de la nav_bar
-        button_size = (60, 60)
+        # Création des boutons de la nav_bar avec size_hint pour ajuster automatiquement
+        button_size = (60, 60)  # Taille des boutons
 
         # Création des boutons de la nav_bar
-        self.home_button    = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/accueil.png", size=button_size)
+        self.home_button = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/accueil.png", size_hint=(None, None), size=button_size)
         self.home_button.bind(on_press=lambda x: self.switch_screen(self.sm, 'home'))
 
-        self.camera_button  = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/camera-icon.png", size=button_size)
+        self.camera_button = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/camera-icon.png", size_hint=(None, None), size=button_size)
         self.camera_button.bind(on_press=lambda x: self.switch_screen(self.sm, 'camera'))
 
-        self.pokedex_button = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/pokeball.png", size=button_size)
+        self.pokedex_button = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/pokeball.png", size_hint=(None, None), size=button_size)
         self.pokedex_button.bind(on_press=lambda x: self.switch_screen(self.sm, 'pokedex'))
 
-        self.profil_button  = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/profil.png", size=button_size)
+        self.profil_button = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/profil.png", size_hint=(None, None), size=button_size)
         self.profil_button.bind(on_press=lambda x: self.switch_screen(self.sm, 'profil'))
 
         # Ajouter les boutons à la nav_bar
@@ -120,7 +129,7 @@ class MainApp(App):
 
         # Ajouter un bouton global visible sur toutes les pages. Il permettra de prendre une photo sur la page camera
         self.capture_button = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/button_image.png", size=(100, 100))
-        self.capture_button.pos_hint = {'center_x': 0.5, 'center_y': 0.10}  # Positionner au centre en bas
+        self.capture_button.pos_hint = {'center_x': 0.5, 'center_y': 0.12}  # Positionner au centre en bas
         self.capture_button.bind(on_press=self.capture_photo)
 
         layout.add_widget(self.capture_button)
@@ -154,7 +163,7 @@ class MainApp(App):
                 cv2.imwrite(filename, frame)
                 print(f"Photo sauvegardée sous {filename}")
 
-    def update_button_visibility(self,instance, value):
+    def update_button_visibility(self, instance, value):
         if self.sm.current == 'camera':
             anim = Animation(opacity=1, duration=0.5)
             anim.start(self.capture_button)
@@ -167,3 +176,4 @@ class MainApp(App):
 if __name__ == '__main__':
     Window.size = (400, 700)  # Taille de la fenêtre
     MainApp().run()
+
