@@ -9,8 +9,6 @@ from kivy.utils import get_color_from_hex
 # Import de mes fichiers
 from mypokemons import mypokemons
 from type_colors import TYPE_COLORS
-from database import *
-
 
 class PokemonCell(FloatLayout):
     def __init__(self, pokemon_data, on_click_callback, **kwargs):
@@ -28,26 +26,26 @@ class PokemonCell(FloatLayout):
             Color(*self.bg_color)
             self.bg = RoundedRectangle(size=self.size, pos=self.pos, radius=[10])
 
-        # Ajouter les icones de type
+        # Ajouter les icônes de type
         self.icones = []
         if isinstance(self.pokemon_data.get('types'), list):
             for i, icon in enumerate(self.pokemon_data['types']):
-                image_path = 'ressources/types/' + icon + '.png'
+                image_path = '/home/rigolo/Pokedex/ressources/types/' + icon + '.png'
                 image = Image(
                     source=image_path,
                     allow_stretch=True, keep_ratio=True,
                     size_hint=(None, None),
-                    size=(self.width * 0.15, self.height * 0.15),
-                    pos_hint={'center_x': 0.2, 'center_y': 0.5 - 0.15 * i}
+                    size=(self.width * 0.35, self.height * 0.35),  # Augmenter la taille ici
+                    pos_hint={'center_x': 0.2, 'center_y': 0.5 - 0.2 * i}
                 )
                 self.icones.append(image)
         else:
-            image_path = 'ressources/types/' + pokemon_type + '.png'
+            image_path = '/home/rigolo/Pokedex/ressources/types/' + pokemon_type + '.png'
             image = Image(
                 source=image_path,
                 allow_stretch=True, keep_ratio=True,
                 size_hint=(None, None),
-                size=(self.width * 0.15, self.height * 0.15),
+                size=(self.width * 0.35, self.height * 0.35),
                 pos_hint={'center_x': 0.2, 'center_y': 0.5}
             )
             self.icones.append(image)
@@ -60,9 +58,10 @@ class PokemonCell(FloatLayout):
             source=self.pokemon_data.get('image_path', ''), 
             allow_stretch=True, keep_ratio=True,
             size_hint=(None, None),
-            size=(self.width * 1.4, self.height * 1.4),
+            size=(self.width * 1.6, self.height * 1.6),  # Augmenter la taille ici
             pos_hint={'center_x': 0.75, 'center_y': 0.7}
         )
+
         self.add_widget(self.pokemon_image)
 
         # Créer et ajouter le label
@@ -70,7 +69,7 @@ class PokemonCell(FloatLayout):
             text=self.pokemon_data['nom'].upper(),
             font_size=30,
             color=(1, 1, 1, 1),
-            font_name='ressources/fonts/Police.otf',
+            font_name='/home/rigolo/Pokedex/ressources/fonts/police.ttf',
             size_hint=(None, None),
             size=(self.width * 0.6, self.height * 0.2),
             bold=True
@@ -82,23 +81,12 @@ class PokemonCell(FloatLayout):
         self.clickable_area.bind(on_release=self.on_cell_click)
         self.add_widget(self.clickable_area)
 
-        # Appel initial pour mettre à jour la position des widgets
+        # Mettre à jour les widgets
         self.update_widgets()
 
-        # Mettre à jour le fond et l'ombre lors du redimensionnement
+        # Mettre à jour le fond et les widgets lors du redimensionnement
         self.bind(size=self.update_bg, pos=self.update_bg)
         self.bind(size=self.update_widgets)
-
-        # Mettre à jour les widgets plusieurs fois jusqu'à ce qu'ils soient correctement ajustés
-        Clock.schedule_once(self.ensure_widgets_updated, 0.1)
-
-    def ensure_widgets_updated(self, dt):
-        # Appeler update_widgets et reprogrammer l'appel si nécessaire
-        self.update_widgets()
-
-        # Relancer l'appel si la taille n'est toujours pas correcte
-        if self.width == 0 or self.height == 0:
-            Clock.schedule_once(self.ensure_widgets_updated, 0.1)
 
     def on_cell_click(self, instance):
         # Appeler la fonction de rappel lors du clic
@@ -114,8 +102,8 @@ class PokemonCell(FloatLayout):
         self.label.pos = (0, self.y + self.height * 0.8)
         
         # Mettre à jour la taille et la position de l'image
-        self.pokemon_image.size = (self.width * 1.4, self.height * 1.4)
-        self.pokemon_image.pos = (self.x + self.width * 0.3, self.y + self.height * 0.3)
+        self.pokemon_image.size = (self.width * 1.3, self.height * 1.3)  # Ajuster ici
+        self.pokemon_image.pos = (self.x + self.width * 0.2, self.y + self.height * 0.2)  # Ajuster ici
 
         # Assurez-vous que le bouton est bien positionné
         self.clickable_area.size_hint = (None, None)

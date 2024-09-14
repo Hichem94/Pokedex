@@ -1,5 +1,5 @@
 pokemon_info = {'nom': 'squirtle', 'taille': 5, 'poids': 90, 'categorie': 'Pokémon Minitortue', 
-                'types': ['flying','water'], 'image_path': 'https://img.pokemondb.net/sprites/scarlet-violet/normal/gyarados.png', 
+                'types': 'water', 'image_path': 'https://img.pokemondb.net/sprites/scarlet-violet/normal/gyarados.png', 
                 'stats': {'pv': 44, 'attaque': 48, 'defense': 65, 'attaque_speciale': 50, 'defense_speciale': 64, 'vitesse': 43}
             }
 pokemon_info2 = {'nom': 'bulbasaur', 'taille': 7, 'poids': 69, 'categorie': 'Pokémon Graine',

@@ -40,7 +40,7 @@ class PokemonDetailsPage(Screen):
             self.rect = RoundedRectangle(size=(Window.width - 50, Window.height - 150), pos=(30, 0), radius=[10])
 
         # Ajouter l'image d'en-tête en haut
-        self.header = Image(source="ressources/imgs/header.png", allow_stretch=True, keep_ratio=False, size_hint=(1, None), height=150)
+        self.header = Image(source="/home/rigolo/Pokedex/ressources/imgs/header.png", allow_stretch=True, keep_ratio=False, size_hint=(1, None), height=150)
         self.layout.add_widget(self.header)
 
         # Créer une ScrollView
@@ -83,7 +83,7 @@ class PokemonDetailsPage(Screen):
             image_downloaded.texture = image_downloaded.texture  # Affecter la texture à la cellule
         except Exception as e:
             print(f"Error fetching image: {e}")
-            image_downloaded = Image(source='ressources/imgs/hyperball.png', size=(50, 50))
+            image_downloaded = Image(source='/home/rigolo/Pokedex/ressources/imgs/hyperball.png', size=(50, 50))
         
 
         return image_downloaded
@@ -96,7 +96,8 @@ class PokemonDetailsPage(Screen):
         self.image = self.download_image(pokemon_data['image_path'])
         self.image.keep_ratio = True
         self.image.size_hint = (None, None)
-        self.image.size = (350, 350)
+        image_size = min(Window.width * 0.6, Window.height * 0.6)  # Taille maximale de l'image
+        self.image.size = (image_size, image_size)
         self.image.pos_hint = {'center_x': 0.5, 'top': 1}
         self.scroll_layout.add_widget(self.image)
 
@@ -129,9 +130,11 @@ class PokemonDetailsPage(Screen):
         self.rect.size = (width - 50, height - 150)
         self.rect.pos = ((width - self.rect.size[0]) / 2, 0)
 
-        # Mettre à jour la position et la taille de l'image
-        self.image.size = (350, 350)
-        self.image.pos_hint = {'center_x': 0.5, 'top': 1}
+        # Mettre à jour la taille et la position de l'image
+        image_size = min(width * 0.6, height * 0.6)  # Taille maximale de l'image en fonction de la taille de la fenêtre
+        self.image.size = (image_size, image_size)
+        self.image.pos = ((width - image_size) / 2, height - image_size - 20)  # Ajuster la position de l'image
+
 
 
     def on_leave(self, *args):
