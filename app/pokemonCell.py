@@ -32,7 +32,7 @@ class PokemonCell(FloatLayout):
         self.icones = []
         if isinstance(self.pokemon_data.get('types'), list):
             for i, icon in enumerate(self.pokemon_data['types']):
-                image_path = 'ressources/types/' + icon + '.png'
+                image_path = '/home/rigolo/Pokedex/ressources/types/' + icon + '.png'
                 image = Image(
                     source=image_path,
                     allow_stretch=True, keep_ratio=True,
@@ -42,7 +42,7 @@ class PokemonCell(FloatLayout):
                 )
                 self.icones.append(image)
         else:
-            image_path = 'ressources/types/' + pokemon_type + '.png'
+            image_path = '/home/rigolo/Pokedex/ressources/types/' + pokemon_type + '.png'
             image = Image(
                 source=image_path,
                 allow_stretch=True, keep_ratio=True,
@@ -70,7 +70,7 @@ class PokemonCell(FloatLayout):
             text=self.pokemon_data['nom'].upper(),
             font_size=30,
             color=(1, 1, 1, 1),
-            font_name='ressources/fonts/Police.otf',
+            font_name='/home/rigolo/Pokedex/ressources/fonts/police.ttf',
             size_hint=(None, None),
             size=(self.width * 0.6, self.height * 0.2),
             bold=True

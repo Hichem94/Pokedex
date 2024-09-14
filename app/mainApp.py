@@ -97,16 +97,16 @@ class MainApp(App):
         button_size = (60, 60)
 
         # Création des boutons de la nav_bar
-        self.home_button    = RoundButton(image_source="ressources/imgs/accueil.png", size=button_size)
+        self.home_button    = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/accueil.png", size=button_size)
         self.home_button.bind(on_press=lambda x: self.switch_screen(self.sm, 'home'))
 
-        self.camera_button  = RoundButton(image_source="ressources/imgs/camera-icon.png", size=button_size)
+        self.camera_button  = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/camera-icon.png", size=button_size)
         self.camera_button.bind(on_press=lambda x: self.switch_screen(self.sm, 'camera'))
 
-        self.pokedex_button = RoundButton(image_source="ressources/imgs/pokeball.png", size=button_size)
+        self.pokedex_button = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/pokeball.png", size=button_size)
         self.pokedex_button.bind(on_press=lambda x: self.switch_screen(self.sm, 'pokedex'))
 
-        self.profil_button  = RoundButton(image_source="ressources/imgs/profil.png", size=button_size)
+        self.profil_button  = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/profil.png", size=button_size)
         self.profil_button.bind(on_press=lambda x: self.switch_screen(self.sm, 'profil'))
 
         # Ajouter les boutons à la nav_bar
@@ -119,7 +119,7 @@ class MainApp(App):
         layout.add_widget(nav_bar)
 
         # Ajouter un bouton global visible sur toutes les pages. Il permettra de prendre une photo sur la page camera
-        self.capture_button = RoundButton(image_source="ressources/imgs/button_image.png", size=(100, 100))
+        self.capture_button = RoundButton(image_source="/home/rigolo/Pokedex/ressources/imgs/button_image.png", size=(100, 100))
         self.capture_button.pos_hint = {'center_x': 0.5, 'center_y': 0.10}  # Positionner au centre en bas
         self.capture_button.bind(on_press=self.capture_photo)
 

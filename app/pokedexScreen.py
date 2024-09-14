@@ -30,7 +30,7 @@ class PokedexScreen(Screen):
             self.rect = Rectangle(size=Window.size, pos=(0, 0))
 
         # Ajouter l'image d'en-tête en haut
-        self.header = Image(source="ressources/imgs/header.png", allow_stretch=True, keep_ratio=False, size_hint=(1, None), height=150)
+        self.header = Image(source="/home/rigolo/Pokedex/ressources/imgs/header.png", allow_stretch=True, keep_ratio=False, size_hint=(1, None), height=150)
         layout.add_widget(self.header)
 
         # Créer un ScrollView pour contenir la grille des Pokémons
@@ -70,7 +70,7 @@ class PokedexScreen(Screen):
                     pokemon_cell_image = Image(texture=texture, allow_stretch=True, keep_ratio=False, size=(150, 150))
             except Exception as e:
                 print(f"Error fetching image: {e}")
-                pokemon_cell_image = Image(source='ressources/imgs/hyperball.png', size=(100, 100))
+                pokemon_cell_image = Image(source='/home/rigolo/Pokedex/ressources/imgs/hyperball.png', size=(100, 100))
 
             # Créer la cellule du Pokémon
             pokemon_cell = PokemonCell(pokemon, on_click_callback=self.show_pokemon_info, size_hint=(None, None), size=(Window.width - 40, 220))

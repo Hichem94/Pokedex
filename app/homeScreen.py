@@ -12,20 +12,20 @@ class HomeScreen(Screen):
         layout = FloatLayout()
 
         # Ajouter l'image de fond
-        self.background_down = Image(source="ressources/imgs/login-bg.jpg", allow_stretch=True, keep_ratio=False,
+        self.background_down = Image(source="/home/rigolo/Pokedex/ressources/imgs/login-bg.jpg", allow_stretch=True, keep_ratio=False,
                                      size_hint=(1, 1))
         layout.add_widget(self.background_down)
 
         # Ajouter l'image d'en-tête
-        self.background_top = Image(source="ressources/imgs/header.png", allow_stretch=True, keep_ratio=False,
+        self.background_top = Image(source="/home/rigolo/Pokedex/ressources/imgs/header.png", allow_stretch=True, keep_ratio=False,
                                     size_hint=(1, None))
         layout.add_widget(self.background_top)
 
-        self.background_pokedex_font = Image(source="ressources/imgs/pokedex_font.png", allow_stretch=True, keep_ratio=False,
+        self.background_pokedex_font = Image(source="/home/rigolo/Pokedex/ressources/imgs/pokedex_font.png", allow_stretch=True, keep_ratio=False,
                                      size_hint=(1, 1), pos_hint={'center_x': 0.5, 'center_y': 0.5})
         layout.add_widget(self.background_pokedex_font)
         
-        self.background_starters_img = Image(source="ressources/imgs/starters.png", allow_stretch=True, keep_ratio=False,
+        self.background_starters_img = Image(source="/home/rigolo/Pokedex/ressources/imgs/starters.png", allow_stretch=True, keep_ratio=False,
                                      size_hint=(0.7, 0.2), pos_hint={'center_x': 0.5, 'center_y': 0.55})
         layout.add_widget(self.background_starters_img)
 

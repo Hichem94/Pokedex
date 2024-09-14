@@ -18,12 +18,12 @@ class CameraScreen(Screen):
         layout = FloatLayout()
 
         # Ajouter l'image de fond
-        self.background_down = Image(source="ressources/imgs/bg_camera.png", allow_stretch=True, keep_ratio=False,
+        self.background_down = Image(source="/home/rigolo/Pokedex/ressources/imgs/bg_camera.png", allow_stretch=True, keep_ratio=False,
                                      size_hint=(1, 1))
         layout.add_widget(self.background_down)
 
         # Ajouter l'image d'en-tête en haut
-        self.background_top = Image(source="ressources/imgs/header.png", allow_stretch=True, keep_ratio=False,
+        self.background_top = Image(source="/home/rigolo/Pokedex/ressources/imgs/header.png", allow_stretch=True, keep_ratio=False,
                                     size_hint=(1, None))
         layout.add_widget(self.background_top)
 

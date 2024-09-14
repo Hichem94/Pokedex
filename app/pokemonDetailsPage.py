@@ -40,7 +40,7 @@ class PokemonDetailsPage(Screen):
             self.rect = RoundedRectangle(size=(Window.width - 50, Window.height - 150), pos=(30, 0), radius=[10])
 
         # Ajouter l'image d'en-tête en haut
-        self.header = Image(source="ressources/imgs/header.png", allow_stretch=True, keep_ratio=False, size_hint=(1, None), height=150)
+        self.header = Image(source="/home/rigolo/Pokedex/ressources/imgs/header.png", allow_stretch=True, keep_ratio=False, size_hint=(1, None), height=150)
         self.layout.add_widget(self.header)
 
         # Créer une ScrollView
@@ -83,7 +83,7 @@ class PokemonDetailsPage(Screen):
             image_downloaded.texture = image_downloaded.texture  # Affecter la texture à la cellule
         except Exception as e:
             print(f"Error fetching image: {e}")
-            image_downloaded = Image(source='ressources/imgs/hyperball.png', size=(50, 50))
+            image_downloaded = Image(source='/home/rigolo/Pokedex/ressources/imgs/hyperball.png', size=(50, 50))
         
 
         return image_downloaded
