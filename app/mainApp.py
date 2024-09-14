@@ -2,7 +2,7 @@ import cv2
 import time
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.screenmanager import ScreenManager, NoTransition, RiseInTransition
+from kivy.uix.screenmanager import ScreenManager, NoTransition, RiseInTransition, FadeTransition
 from kivy.graphics import Color, Rectangle
 from kivy.core.window import Window
 from kivy.uix.image import Image
@@ -143,13 +143,10 @@ class MainApp(App):
         return layout
 
     def switch_screen(self, sm, screen_name):
-        if screen_name == 'pokemon_info':
-            sm.transition = RiseInTransition()
-        else:
-            sm.transition = NoTransition()  # Suppression des transitions
+        sm.transition = NoTransition()  # Suppression des transitions
         sm.current = screen_name
 
-    def capture_photo(self):
+    def capture_photo(self, instance=None):
         if self.sm.current == 'camera':
             # Accéder à l'écran de la caméra
             camera_screen = self.sm.get_screen('camera')
