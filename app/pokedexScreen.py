@@ -1,6 +1,6 @@
 import cv2
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.screenmanager import Screen
+from kivy.uix.screenmanager import Screen, RiseInTransition
 from kivy.graphics import Color, Rectangle
 from kivy.core.window import Window
 from kivy.uix.image import Image
@@ -37,7 +37,7 @@ class PokedexScreen(Screen):
         layout.add_widget(self.header)
 
         # Créer un ScrollView pour contenir la grille des Pokémons
-        self.scroll_view = ScrollView(size_hint=(1, 0.8), pos_hint={'x': 0, 'y': 0.035})
+        self.scroll_view = ScrollView(size_hint=(1, 0.78), pos_hint={'x': 0, 'y': 0.035})
         
         # Créer la grille pour afficher les Pokémons
         self.grid = GridLayout(
@@ -119,4 +119,6 @@ class PokedexScreen(Screen):
     def show_pokemon_info(self, pokemon_data):
         details_page = self.manager.get_screen('pokemon_info')
         details_page.display_pokemon_info(pokemon_data)
+
+        self.manager.transition = RiseInTransition()
         self.manager.current = 'pokemon_info'

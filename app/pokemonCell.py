@@ -36,7 +36,7 @@ class PokemonCell(FloatLayout):
                     allow_stretch=True, keep_ratio=True,
                     size_hint=(None, None),
                     size=(self.width * 0.35, self.height * 0.35),  # Augmenter la taille ici
-                    pos_hint={'center_x': 0.2, 'center_y': 0.5 - 0.2 * i}
+                    pos_hint={'center_x': 0.2, 'center_y': 0.5 - 0.13 * i}
                 )
                 self.icones.append(image)
         else:
@@ -71,7 +71,7 @@ class PokemonCell(FloatLayout):
             color=(1, 1, 1, 1),
             font_name='/home/rigolo/Pokedex/ressources/fonts/police.ttf',
             size_hint=(None, None),
-            size=(self.width * 0.6, self.height * 0.2),
+            size=(self.width * 0.65, self.height * 0.2),
             bold=True
         )
         self.add_widget(self.label)
@@ -98,7 +98,7 @@ class PokemonCell(FloatLayout):
 
     def update_widgets(self, *args):
         # Mettre à jour la taille et la position du label
-        self.label.size = (self.width * 0.6, self.height * 0.2)
+        self.label.size = (self.width * 0.65, self.height * 0.2)
         self.label.pos = (0, self.y + self.height * 0.8)
         
         # Mettre à jour la taille et la position de l'image
