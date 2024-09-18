@@ -13,6 +13,7 @@ cursor.execute('''
         categorie TEXT,
         poids INTEGER,
         image_path TEXT,
+        cries TEXT,
         pv INTEGER,
         attaque INTEGER,
         defense INTEGER,
@@ -102,10 +103,10 @@ def ajouter_pokemon(pokemon_info):
     conn = sqlite3.connect('pokedex.db')
     cursor = conn.cursor()
     
-    cursor.execute("INSERT INTO mypokemons (nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse)\
+    cursor.execute("INSERT INTO mypokemons (nom, taille, categorie, poids, image_path, cries, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse)\
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                    (pokemon_info['nom'], pokemon_info['taille'], pokemon_info['categorie'], pokemon_info['poids'],
-                    pokemon_info['image_path'], pokemon_info['stats']['pv'], pokemon_info['stats']['attaque'], pokemon_info['stats']['defense'],
+                    pokemon_info['image_path'], pokemon_info['cries'], pokemon_info['stats']['pv'], pokemon_info['stats']['attaque'], pokemon_info['stats']['defense'],
                     pokemon_info['stats']['attaque_speciale'], pokemon_info['stats']['defense_speciale'], pokemon_info['stats']['vitesse'],)
                    )
     conn.commit()
@@ -130,7 +131,7 @@ def lister_tous_les_pokemons():
     conn = sqlite3.connect('pokedex.db')
     cursor = conn.cursor()
 
-    cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
+    cursor.execute("SELECT nom, taille, categorie, poids, image_path, cries, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
                     FROM mypokemons")
 
     conn.commit()
@@ -145,7 +146,7 @@ def lister_un_pokemon(pokemon_name):
     cursor = conn.cursor()
 
     # Utilisation de paramètres de requête pour éviter l'injection SQL
-    cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
+    cursor.execute("SELECT nom, taille, categorie, poids, image_path, cries, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
                     FROM mypokemons\
                     WHERE nom=?", (pokemon_name,))
     

@@ -5,12 +5,9 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, NoTransition, RiseInTransition, FadeTransition
 from kivy.graphics import Color, Rectangle
 from kivy.core.window import Window
-from kivy.uix.image import Image
-from kivy.uix.button import Button
-from kivy.properties import StringProperty
 from kivy.animation import Animation
 from kivy.uix.gridlayout import GridLayout
-from kivy.clock import Clock
+from roundButton import RoundButton
 
 
 
@@ -21,50 +18,23 @@ from pokedexScreen import PokedexScreen
 from pokedexScreen import PokedexScreen
 from pokemonDetailsPage import PokemonDetailsPage
 from profilScreen import ProfilScreen
+from prediction_utils import load_model
+from api_pokemon import get_pokemon_info
 from database import *
+from model import *
 
 
 
 from kivy.clock import Clock
 
-class RoundButton(Button):
-    source = StringProperty('')
-
-    def __init__(self, image_source, **kwargs):
-        super().__init__(**kwargs)
-        self.source = image_source
-        self.background_normal = ''
-        self.background_down = ''
-        self.background_color = (0, 0, 0, 0)
-        self.size_hint = (None, None)
-        
-        # Ajouter un bind pour ajuster la taille de l'image lorsque le bouton change de taille
-        self.bind(size=self.update_img_size, pos=self.update_img_pos)
-
-    def on_size(self, *args):
-        # Planifier l'ajout de l'image après l'initialisation du bouton
-        Clock.schedule_once(self.create_image)
-
-    def create_image(self, *args):
-        if not hasattr(self, 'image'):
-            self.image = Image(source=self.source, size=self.size, pos=self.pos)
-            self.add_widget(self.image)
-        self.update_img_size()
-
-    def update_img_pos(self, *args):
-        if hasattr(self, 'image'):
-            self.image.pos = self.pos
-
-    def update_img_size(self, *args):
-        if hasattr(self, 'image'):
-            # Mettre à jour la taille de l'image tout en conservant les proportions
-            self.image.size = self.size
-            self.image.texture_size = self.image.texture_size  # Pour éviter la perte de proportion
 
 
 class MainApp(App):
     def build(self):
         self.sm = ScreenManager()
+
+        # Dictionnaire pour stocker les informations du Pokémon
+        self.pokemon_data = {}
 
         self.sm.add_widget(HomeScreen(name='home'))
         self.sm.add_widget(CameraScreen(name='camera'))
@@ -146,19 +116,31 @@ class MainApp(App):
         sm.transition = NoTransition()  # Suppression des transitions
         sm.current = screen_name
 
+    
     def capture_photo(self, instance=None):
         if self.sm.current == 'camera':
-            # Accéder à l'écran de la caméra
             camera_screen = self.sm.get_screen('camera')
-
-            # Capturer une image
             ret, self.frame = camera_screen.capture.read()
             if ret:
-                # Enregistrer l'image
+                self.model = load_model("/home/rigolo/Pokedex/app/pokedex.keras")
+                pokemon_predicted = make_prediction(self.model, self.frame)
+
+                # Récupérer les informations sur le Pokémon
+                self.pokemon_info = get_pokemon_info(pokemon_predicted)
+
                 timestamp = time.strftime("%Y%m%d_%H%M%S")
                 filename = f"photo_{timestamp}.png"
                 cv2.imwrite(filename, self.frame)
                 print(f"Photo sauvegardée sous {filename}")
+
+                # Accéder à l'écran Pokedex et lui transmettre les infos du Pokémon
+                pokedex_screen = self.sm.get_screen('pokedex')
+                pokedex_screen.update_pokemon_info(self.pokemon_info)
+
+                # Passer à l'écran Pokedex
+                self.switch_screen(self.sm, 'pokedex')
+
+
 
     def update_button_visibility(self, instance, value):
         if self.sm.current == 'camera':
