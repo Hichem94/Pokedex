@@ -25,6 +25,7 @@ def get_pokemon_info(name):
             categorie = "No info"
         types = [type_info['type']['name'] for type_info in data['types']]
         image_path = "https://img.pokemondb.net/sprites/scarlet-violet/normal/" + str(name).lower() + ".png"
+        cries = data['cries'][0]
         stats = data['stats']
         pv = next(stat['base_stat'] for stat in stats if stat['stat']['name'] == 'hp')
         attaque = next(stat['base_stat'] for stat in stats if stat['stat']['name'] == 'attack')
@@ -49,6 +50,7 @@ def get_pokemon_info(name):
             'categorie': categorie,
             'types': types,
             'image_path': image_path,
+            'cries' : cries,
             'stats': stats_b
         }
         print("############### POKEMON_INFO ####################\n")
