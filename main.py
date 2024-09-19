@@ -139,7 +139,6 @@ class MainApp(App):
                     
                 # Effectuer la prédiction
                 pokemon_predicted = make_prediction(self.model, img_path)
-                print(pokemon_predicted)
                 if pokemon_predicted is None:
                     print("Erreur lors de la prédiction.")
                     os.remove(img_path)
@@ -151,6 +150,8 @@ class MainApp(App):
                     print("Erreur lors de la récupération des informations sur le Pokémon.")
                     os.remove(img_path)
                     return
+                
+                ajouter_pokemon(self.pokemon_info)
                 
                 print("Informations sur le Pokémon récupérées.")
                 
