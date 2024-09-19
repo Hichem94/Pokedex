@@ -7,8 +7,7 @@ cursor = conn.cursor()
 # Créer la table 'mypokemons'
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS mypokemons (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom TEXT,
+        nom TEXT PRIMARY KEY,
         taille INTEGER,
         categorie TEXT,
         poids INTEGER,
@@ -84,10 +83,10 @@ conn.commit()
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS pokemon_type (
-    id_pokemon INT,
+    id_pokemon TEXT,
     id_type INT,
     PRIMARY KEY (id_pokemon, id_type),
-    FOREIGN KEY (id_pokemon) REFERENCES pokemon(id_pokemon),
+    FOREIGN KEY (id_pokemon) REFERENCES mypokemons(nom),
     FOREIGN KEY (id_type) REFERENCES type(id_type)
     );
 ''')
@@ -101,28 +100,32 @@ def ajouter_pokemon(pokemon_info):
     """pokemon_info est un dictionnaire"""
     conn = sqlite3.connect('pokedex.db')
     cursor = conn.cursor()
-    
-    cursor.execute("INSERT INTO mypokemons (nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse)\
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                   (pokemon_info['nom'], pokemon_info['taille'], pokemon_info['categorie'], pokemon_info['poids'],
-                    pokemon_info['image_path'], pokemon_info['stats']['pv'], pokemon_info['stats']['attaque'], pokemon_info['stats']['defense'],
-                    pokemon_info['stats']['attaque_speciale'], pokemon_info['stats']['defense_speciale'], pokemon_info['stats']['vitesse'],)
-                   )
-    conn.commit()
-    pokemon_id = cursor.lastrowid
+    try:
+        cursor.execute("INSERT INTO mypokemons (nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse)\
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (pokemon_info['nom'], pokemon_info['taille'], pokemon_info['categorie'], pokemon_info['poids'],
+                        pokemon_info['image_path'], pokemon_info['stats']['pv'], pokemon_info['stats']['attaque'], pokemon_info['stats']['defense'],
+                        pokemon_info['stats']['attaque_speciale'], pokemon_info['stats']['defense_speciale'], pokemon_info['stats']['vitesse'],)
+                    )
+        conn.commit()
+        pokemon_id = pokemon_info['nom']
 
-    # Récupérer les ID de/des type(s) du pokemon
-    types_du_pokemon = tuple(pokemon_info['types'])
+        # Récupérer les ID de/des type(s) du pokemon
+        types_du_pokemon = tuple(pokemon_info['types'])
 
-    cursor.execute(f"SELECT id_type FROM type WHERE nom_type IN ({','.join('?' * len(types_du_pokemon))})", types_du_pokemon)
-    type_ids = [row[0] for row in cursor.fetchall()]
+        cursor.execute(f"SELECT id_type FROM type WHERE nom_type IN ({','.join('?' * len(types_du_pokemon))})", types_du_pokemon)
+        type_ids = [row[0] for row in cursor.fetchall()]
 
-    # Insertion des type-Pokémon
-    for type_id in type_ids:
-        cursor.execute("INSERT INTO pokemon_type (id_pokemon, id_type) VALUES (?, ?)", (pokemon_id, type_id))
-
-    conn.commit()
-    conn.close()
+        # Insertion des type-Pokémon
+        for type_id in type_ids:
+            cursor.execute("INSERT INTO pokemon_type (id_pokemon, id_type) VALUES (?, ?)", (pokemon_id, type_id))
+        
+        conn.commit()
+        conn.close()
+    except:
+        print("Pokemon déjà dans la base")
+        conn.commit()
+        conn.close()
 
 
 # Fonction pour lister tous les Pokémon
@@ -132,23 +135,25 @@ def lister_tous_les_pokemons():
     # Configurer le curseur pour utiliser sqlite3.Row
     cursor.row_factory = sqlite3.Row
 
-
-    cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
-                    FROM mypokemons")
     
-    # cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse, nom_type\
-    #                 FROM mypokemons, pokemon_type, type\
-    #                 WHERE mypokemon.id = pokemon_type.id_pokemon\
-    #                 AND type.id_type = pokemon_type.id_type")
+    cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse,\
+                    GROUP_CONCAT(type.nom_type, ', ') AS types\
+                    FROM mypokemons\
+                    JOIN pokemon_type ON nom = id_pokemon\
+                    JOIN type ON type.id_type = pokemon_type.id_type\
+                    GROUP BY nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse")
 
     conn.commit()
     rows = cursor.fetchall()
     pokemons = [dict(row) for row in rows]
 
 
+    # Transformer le type en liste
+    for pokemon in pokemons:
+        pokemon['types'] = pokemon['types'].split(',')
 
+    
     conn.close()
-
     return pokemons
 
 

@@ -51,9 +51,9 @@ def get_pokemon_info(name):
             'image_path': image_path,
             'stats': stats_b
         }
-        print("############### POKEMON_INFO ####################\n")
-        print("\n")
-        print(pokemon_info)
+        # print("############### POKEMON_INFO ####################\n")
+        # print("\n")
+        # print(pokemon_info)
         return pokemon_info
 
     except:

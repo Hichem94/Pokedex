@@ -28,25 +28,15 @@ class PokemonCell(FloatLayout):
 
         # Ajouter les icônes de type
         self.icones = []
-        if isinstance(self.pokemon_data.get('types'), list):
-            for i, icon in enumerate(self.pokemon_data['types']):
-                image_path = 'ressources/types/' + icon + '.png'
-                image = Image(
-                    source=image_path,
-                    allow_stretch=True, keep_ratio=True,
-                    size_hint=(None, None),
-                    size=(self.width * 0.35, self.height * 0.35),  # Augmenter la taille ici
-                    pos_hint={'center_x': 0.2, 'center_y': 0.5 - 0.13 * i}
-                )
-                self.icones.append(image)
-        else:
-            image_path = 'ressources/types/' + pokemon_type + '.png'
+        for i, icon in enumerate(self.pokemon_data['types']):
+            image_path = 'ressources/types/' + icon.strip() + '.png'
+            print("image path : ", image_path)
             image = Image(
                 source=image_path,
                 allow_stretch=True, keep_ratio=True,
                 size_hint=(None, None),
-                size=(self.width * 0.35, self.height * 0.35),
-                pos_hint={'center_x': 0.2, 'center_y': 0.5}
+                size=(self.width * 0.2, self.height * 0.2),  # Augmenter la taille ici
+                pos_hint={'center_x': 0.2, 'center_y': 0.5 - 0.15 * i}
             )
             self.icones.append(image)
 
@@ -61,7 +51,6 @@ class PokemonCell(FloatLayout):
             size=(self.width * 1.6, self.height * 1.6),  # Augmenter la taille ici
             pos_hint={'center_x': 0.75, 'center_y': 0.7}
         )
-
         self.add_widget(self.pokemon_image)
 
         # Créer et ajouter le label
@@ -81,12 +70,12 @@ class PokemonCell(FloatLayout):
         self.clickable_area.bind(on_release=self.on_cell_click)
         self.add_widget(self.clickable_area)
 
-        # Mettre à jour les widgets
-        self.update_widgets()
-
+        # Planifier la mise à jour après l'initialisation
         # Mettre à jour le fond et les widgets lors du redimensionnement
         self.bind(size=self.update_bg, pos=self.update_bg)
         self.bind(size=self.update_widgets)
+        Clock.schedule_once(self.update_widgets, 0)
+
 
     def on_cell_click(self, instance):
         # Appeler la fonction de rappel lors du clic

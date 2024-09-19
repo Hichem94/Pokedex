@@ -91,7 +91,7 @@ class MainApp(App):
         nav_bar.add_widget(self.profil_button)
 
         # Ajouter la nav_bar au layout principal
-        layout.add_widget(nav_bar)
+        layout.add_widget(nav_bar)      
 
         # Ajouter un bouton global visible sur toutes les pages. Il permettra de prendre une photo sur la page camera
         self.capture_button = RoundButton(image_source="ressources/imgs/button_image.png", size=(100, 100))

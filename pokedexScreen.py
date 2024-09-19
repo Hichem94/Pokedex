@@ -20,10 +20,7 @@ from database import lister_tous_les_pokemons
 class PokedexScreen(Screen):
     def __init__(self, **kwargs):
         super(PokedexScreen, self).__init__(**kwargs)
-        # Si aucun pokemon_data n'est fourni, utiliser une liste vide par défaut
-        # if pokemon_data is None:
-        #     pokemon_data = []
-        
+       
         layout = FloatLayout()
 
         # Dessiner un rectangle blanc en arrière-plan
@@ -32,15 +29,12 @@ class PokedexScreen(Screen):
             self.rect = Rectangle(size=Window.size, pos=(0, 0))
 
         # Ajouter l'image d'en-tête en haut
-        self.header = Image(
-            source="ressources/imgs/header.png",
-            allow_stretch=True,
-            keep_ratio=False,
-            size_hint=(1, None),
-            height=150
-        )
-        layout.add_widget(self.header)
-
+        self.background_top = Image(source="ressources/imgs/header.png", 
+                                    allow_stretch=True, 
+                                    keep_ratio=False,
+                                    size_hint=(1, None))
+        layout.add_widget(self.background_top)
+        
         # Créer un ScrollView pour contenir la grille des Pokémons
         self.scroll_view = ScrollView(size_hint=(1, 0.78), pos_hint={'x': 0, 'y': 0.035})
         
@@ -63,13 +57,31 @@ class PokedexScreen(Screen):
         # Ajouter le layout au screen
         self.add_widget(layout)
 
-        # Mettre à jour la taille du rectangle lors du redimensionnement
-        Window.bind(on_resize=self.on_window_resize)
-    
+        # # Assurer que la mise à jour du header est effectuée après la création des widgets
+        # Window.bind(on_resize=self.on_window_resize)
+        # Clock.schedule_once(self.update_header, 0)
+
+
+    def update_header_position(self):
+        if self.background_top:
+            self.background_top.size = (self.width, self.background_top.texture_size[1])
+            self.background_top.pos = (0, self.height - self.background_top.height)
+
+        if self.rect:
+            self.rect.size = (self.width, self.height)
+        
+    def on_size(self, *args):
+        self.update_header_position()
+
+    def on_texture(self, *args):
+        self.update_header_position()
+
     def load_pokemons(self):
+        print("######## POKEMON LOAD : ")
         pokemons = lister_tous_les_pokemons()
         for pokemon in pokemons:
             print(pokemon)
+            print('\n')
             url = pokemon['image_path']
 
             try:
@@ -106,29 +118,13 @@ class PokedexScreen(Screen):
         # Planifier la mise à jour des positions des cellules après le chargement
         Clock.schedule_once(self.update_cell_positions, 0)
 
-    # def update_pokemon_info(self, pokemon_data):
-    #     # Mettre à jour l'affichage avec les nouvelles informations du Pokémon
-    #     self.load_pokemons([pokemon_data])
-
     def update_cell_positions(self, dt):
         for cell in self.grid.children:
             cell.update_widgets()
     
-    def on_window_resize(self, instance, width, height):
-        # Ajuster les éléments en fonction de la taille de la fenêtre
-        self.header.size = (width, self.header.height)
-        self.header.pos = (0, height - self.header.height)
-
-        # Redimensionner les cellules en fonction de la largeur de la fenêtre
-        for child in self.grid.children:
-            child.size = (width - 40, child.height)
-
-        # Mettre à jour la taille du rectangle de fond
-        self.rect.size = (width, height)
-
     def show_pokemon_info(self, pokemon_data):
         details_page = self.manager.get_screen('pokemon_info')
         details_page.display_pokemon_info(pokemon_data)
-
+    
         self.manager.transition = RiseInTransition()
         self.manager.current = 'pokemon_info'

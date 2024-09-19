@@ -38,15 +38,18 @@ class PokemonDetailsPage(Screen):
             self.rect = RoundedRectangle(size=(Window.width - 50, Window.height - 150), pos=(30, 0), radius=[10])
 
         # Ajouter l'image d'en-tête en haut
-        self.header = Image(source="ressources/imgs/header.png", allow_stretch=True, keep_ratio=False, size_hint=(1, None), height=150)
-        self.layout.add_widget(self.header)
+        self.background_top = Image(source="ressources/imgs/header.png", 
+                                    allow_stretch=True, 
+                                    keep_ratio=False,
+                                    size_hint=(1, None))
+        self.layout.add_widget(self.background_top)
 
         # Créer une ScrollView
         self.scroll_view = ScrollView(size_hint=(1, 0.8), pos_hint={'x': 0, 'y': 0.1})
         self.layout.add_widget(self.scroll_view)
 
         # Créer un BoxLayout pour contenir les éléments dans la ScrollView
-        self.scroll_layout = BoxLayout(orientation='vertical', padding=10, spacing=10, size_hint_y=None)
+        self.scroll_layout = BoxLayout(orientation='vertical', padding=0, spacing=20, size_hint_y=None)
         self.scroll_layout.bind(minimum_height=self.scroll_layout.setter('height'))
 
         # Ajouter le BoxLayout à la ScrollView
@@ -127,7 +130,6 @@ class PokemonDetailsPage(Screen):
 
     def display_pokemon_info(self, pokemon_data):
         # Mettre à jour le fond avec la couleur du type de Pokémon
-        print(pokemon_data)
         self.display_bg(pokemon_data)
 
         # # Ajouter le diagramme après les autres widgets
@@ -135,13 +137,13 @@ class PokemonDetailsPage(Screen):
         #     self.scroll_layout.add_widget(self.diagram_image)
 
         # Télécharger et afficher l'image du Pokémon
-        pokemon_img = self.download_image(pokemon_data['image_path'])
-        pokemon_img.keep_ratio = True
-        pokemon_img.size_hint = (None, None)
+        self.pokemon_img = self.download_image(pokemon_data['image_path'])
+        self.pokemon_img.keep_ratio = True
+        self.pokemon_img.size_hint = (None, None)
         image_size = min(Window.width * 0.6, Window.height * 0.6)  # Taille maximale de l'image
-        pokemon_img.size = (image_size, image_size)
-        pokemon_img.pos_hint = {'center_x': 0.5, 'top': 1}
-        self.scroll_layout.add_widget(pokemon_img)
+        self.pokemon_img.size = (image_size, image_size)
+        self.pokemon_img.pos_hint = {'center_x': 0.5, 'top': 1}
+        self.scroll_layout.add_widget(self.pokemon_img)
 
         # Créer et ajouter le label nom
         self.name_label = Label(
@@ -160,12 +162,32 @@ class PokemonDetailsPage(Screen):
         # self.pokemon_cry = MusicWidget(pokemon_data['cries'])
         # self.scroll_layout.add_widget(self.pokemon_cry)
 
+    def update_header_position(self):
+        if self.background_top:
+            self.background_top.size = (self.width, self.background_top.texture_size[1])
+            self.background_top.pos = (0, self.height - self.background_top.height)
+        
+        if self.bg_rect:
+            self.bg_rect.size = (self.width, self.height)
+        
+        if self.rect:
+            self.rect.size = (Window.width - 50, Window.height - 150)
+
+        if self.pokemon_img:
+            image_size = min(Window.width * 0.6, Window.height * 0.6)
+            self.pokemon_img.size = (image_size, image_size)
+
+
+
+    def on_size(self, *args):
+        self.update_header_position()
+
+    def on_texture(self, *args):
+        self.update_header_position()
+
+
     def on_window_resize(self, instance, width, height):
         # Ajuster les éléments en fonction de la taille de la fenêtre
-
-        if hasattr(self, 'header'):
-            self.header.size = (width, 150)
-            self.header.pos = (0, height - self.header.height)
 
         if hasattr(self, 'bg_rect'):
             self.bg_rect.size = (width, height)
