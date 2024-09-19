@@ -129,13 +129,26 @@ def ajouter_pokemon(pokemon_info):
 def lister_tous_les_pokemons():
     conn = sqlite3.connect('pokedex.db')
     cursor = conn.cursor()
+    # Configurer le curseur pour utiliser sqlite3.Row
+    cursor.row_factory = sqlite3.Row
+
 
     cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
                     FROM mypokemons")
+    
+    # cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse, nom_type\
+    #                 FROM mypokemons, pokemon_type, type\
+    #                 WHERE mypokemon.id = pokemon_type.id_pokemon\
+    #                 AND type.id_type = pokemon_type.id_type")
 
     conn.commit()
-    pokemons = cursor.fetchall()
+    rows = cursor.fetchall()
+    pokemons = [dict(row) for row in rows]
+
+
+
     conn.close()
+
     return pokemons
 
 
@@ -150,6 +163,6 @@ def lister_un_pokemon(pokemon_name):
                     WHERE nom=?", (pokemon_name,))
     
     pokemon = cursor.fetchall()
-
+    
     conn.close()
     return pokemon

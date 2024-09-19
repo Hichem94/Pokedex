@@ -15,18 +15,16 @@ import numpy as np
 from PIL import Image as PILImage
 from pokemonCell import PokemonCell
 
-from database import *
+from database import lister_tous_les_pokemons
 
 class PokedexScreen(Screen):
-    def __init__(self, pokemon_data=None, **kwargs):
+    def __init__(self, **kwargs):
         super(PokedexScreen, self).__init__(**kwargs)
         # Si aucun pokemon_data n'est fourni, utiliser une liste vide par défaut
-        if pokemon_data is None:
-            pokemon_data = []
+        # if pokemon_data is None:
+        #     pokemon_data = []
         
         layout = FloatLayout()
-
-
 
         # Dessiner un rectangle blanc en arrière-plan
         with layout.canvas.before:
@@ -55,8 +53,8 @@ class PokedexScreen(Screen):
         )
         self.grid.bind(minimum_height=self.grid.setter('height'))
 
-        if pokemon_data:
-            self.load_pokemons(pokemon_data)
+
+        self.load_pokemons()
 
         # Ajouter la grille dans le ScrollView
         self.scroll_view.add_widget(self.grid)
@@ -68,8 +66,10 @@ class PokedexScreen(Screen):
         # Mettre à jour la taille du rectangle lors du redimensionnement
         Window.bind(on_resize=self.on_window_resize)
     
-    def load_pokemons(self, pokemon_data):
-        for pokemon in pokemon_data:
+    def load_pokemons(self):
+        pokemons = lister_tous_les_pokemons()
+        for pokemon in pokemons:
+            print(pokemon)
             url = pokemon['image_path']
 
             try:
@@ -106,9 +106,9 @@ class PokedexScreen(Screen):
         # Planifier la mise à jour des positions des cellules après le chargement
         Clock.schedule_once(self.update_cell_positions, 0)
 
-    def update_pokemon_info(self, pokemon_data):
-        # Mettre à jour l'affichage avec les nouvelles informations du Pokémon
-        self.load_pokemons([pokemon_data])
+    # def update_pokemon_info(self, pokemon_data):
+    #     # Mettre à jour l'affichage avec les nouvelles informations du Pokémon
+    #     self.load_pokemons([pokemon_data])
 
     def update_cell_positions(self, dt):
         for cell in self.grid.children:

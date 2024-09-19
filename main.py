@@ -25,12 +25,6 @@ from database import *
 
 
 
-
-
-
-
-
-
 class MainApp(App):
     def build(self):
         self.sm = ScreenManager()
@@ -166,7 +160,7 @@ class MainApp(App):
 
                 # Accéder à l'écran Pokedex et lui transmettre les infos du Pokémon
                 pokedex_screen = self.sm.get_screen('pokedex')
-                pokedex_screen.update_pokemon_info(self.pokemon_info)
+                #pokedex_screen.update_pokemon_info(self.pokemon_info)
 
                 # Passer à l'écran Pokedex
                 self.switch_screen(self.sm, 'pokedex')
