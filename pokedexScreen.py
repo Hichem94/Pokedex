@@ -40,8 +40,8 @@ class PokedexScreen(Screen):
         
         # Créer la grille pour afficher les Pokémons
         self.grid = GridLayout(
-            cols=1,
-            padding=[20, 20, 20, 65],
+            cols=2,
+            padding=[20, 20, 20, 20],
             spacing=[15, 15],
             size_hint_y=None
         )
@@ -77,6 +77,27 @@ class PokedexScreen(Screen):
         self.update_header_position()
 
 
+    def get_next_cell_position(self):
+        # Compte le nombre actuel de cellules
+        current_cell_count = len(self.grid.children)
+        
+        # Détermine la ligne et la colonne pour la prochaine cellule
+        row = current_cell_count // self.grid.cols
+        col = current_cell_count % self.grid.cols
+        
+        # Calcule les dimensions des cellules
+        cell_width = self.grid.width / self.grid.cols
+        cell_height = (self.grid.height - (self.grid.padding[1] + self.grid.padding[3]) - (self.grid.spacing[1] * (self.grid.cols - 1))) / ((current_cell_count // self.grid.cols) + 1)
+        
+        # Calcule les positions en pixels
+        x_position = col * (cell_width + self.grid.spacing[0]) + self.grid.padding[0]
+        y_position = (self.grid.height - self.grid.padding[1]) - ((row + 1) * cell_height + row * self.grid.spacing[1])
+        
+        # Retourne les coordonnées en colonne, ligne et position en pixels
+        return col, row, (x_position, y_position)
+
+
+
     def load_pokemons(self): 
         # Vider la grille avant de la remplir
         self.grid.clear_widgets()
@@ -110,12 +131,16 @@ class PokedexScreen(Screen):
                 print(f"Error fetching image: {e}")
                 pokemon_cell_image = Image(source='ressources/imgs/hyperball.png', size=(100, 100))
 
+            # Calculer la position de la prochaine cellule
+            row, col, pos = self.get_next_cell_position()
+
             # Créer la cellule du Pokémon
             pokemon_cell = PokemonCell(
                 pokemon,
                 on_click_callback=self.show_pokemon_info,
+                position_in_grid=(row, col, pos),
                 size_hint=(None, None),
-                size=(Window.width - 40, 220)
+                size=(Window.width/4.5, 100)
             )
             pokemon_cell.pokemon_image.texture = pokemon_cell_image.texture  # Affecter la texture à la cellule
             self.grid.add_widget(pokemon_cell)

@@ -11,15 +11,22 @@ from mypokemons import mypokemons
 from type_colors import TYPE_COLORS
 
 class PokemonCell(FloatLayout):
-    def __init__(self, pokemon_data, on_click_callback, **kwargs):
+    def __init__(self, pokemon_data, on_click_callback, position_in_grid,**kwargs):
         super(PokemonCell, self).__init__(**kwargs)
         self.pokemon_data = pokemon_data
         self.on_click_callback = on_click_callback
-
+        self.position_in_grid = position_in_grid
         # Déterminer la couleur de fond basée sur le type de Pokémon
         pokemon_type = self.pokemon_data.get('types', [])[0] if isinstance(self.pokemon_data.get('types'), list) else self.pokemon_data.get('types', '')
         bg_color_hex = TYPE_COLORS.get(pokemon_type, '#FFFFFF')  # Utiliser une couleur par défaut
         self.bg_color = get_color_from_hex(bg_color_hex)
+
+
+        print("SIZE CELLULE : ", self.size)
+        print("SIZE WIDTH : ", self.width)
+        print("SIZE HEIGHT : ", self.height)
+        print("POS CELLULE : ", self.pos)
+        print("POSITION IN GRID : ", self.position_in_grid)
 
         # Créer le fond
         with self.canvas.before:
@@ -35,8 +42,8 @@ class PokemonCell(FloatLayout):
                 source=image_path,
                 allow_stretch=True, keep_ratio=True,
                 size_hint=(None, None),
-                size=(self.width * 0.2, self.height * 0.2),  # Augmenter la taille ici
-                pos_hint={'center_x': 0.2, 'center_y': 0.5 - 0.15 * i}
+                size=(self.width * 0.2, self.height * 0.2),
+                pos_hint={'center_x': 0.25, 'center_y': 0.5 - 0.15 * i}
             )
             self.icones.append(image)
 
@@ -48,7 +55,7 @@ class PokemonCell(FloatLayout):
             source=self.pokemon_data.get('image_path', ''), 
             allow_stretch=True, keep_ratio=True,
             size_hint=(None, None),
-            size=(self.width * 1.6, self.height * 1.6),  # Augmenter la taille ici
+            size=(self.width * 1.6, self.height * 1.6),
             pos_hint={'center_x': 0.75, 'center_y': 0.7}
         )
         self.add_widget(self.pokemon_image)
@@ -56,13 +63,13 @@ class PokemonCell(FloatLayout):
         # Créer et ajouter le label
         self.label = Label(
             text=self.pokemon_data['nom'].upper(),
-            font_size=30,
             color=(1, 1, 1, 1),
             font_name='ressources/fonts/police.ttf',
-            size_hint=(None, None),
-            size=(self.width * 0.65, self.height * 0.2),
+            size=(self.width * 1.3, self.height * 1.3),
+            pos=(self.x, self.y),
             bold=True
         )
+        print("LABEL POS : ", self.label.pos)
         self.add_widget(self.label)
 
         # Créer le bouton transparent pour gérer le clic
@@ -87,12 +94,19 @@ class PokemonCell(FloatLayout):
 
     def update_widgets(self, *args):
         # Mettre à jour la taille et la position du label
-        self.label.size = (self.width * 0.65, self.height * 0.2)
-        self.label.pos = (0, self.y + self.height * 0.8)
+        self.label.size = (self.width * 1.3, self.height * 1.3) 
+        self.label.pos  = (self.x-10, self.y+self.height/2.8)
         
         # Mettre à jour la taille et la position de l'image
-        self.pokemon_image.size = (self.width * 1.3, self.height * 1.3)  # Ajuster ici
-        self.pokemon_image.pos = (self.x + self.width * 0.2, self.y + self.height * 0.2)  # Ajuster ici
+        self.pokemon_image.size = (self.width * 1.3, self.height * 1.3)
+        self.pokemon_image.pos = (self.x + self.width * 0.2, self.y + self.height * 0.2)
+
+        # Mettre à jour la taille et la position des icones de types
+        i = 0
+        for icon in self.icones:
+            icon.size = (self.width * 0.4, self.height * 0.4)
+            icon.pos_hint={'center_x': 0.25, 'center_y': 0.5 - 0.18 * i}
+            i+=1
 
         # Assurez-vous que le bouton est bien positionné
         self.clickable_area.size_hint = (None, None)
