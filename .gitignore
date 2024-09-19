@@ -1,1 +1,4 @@
 **/__pycache__
+**/dataset
+**/dataset_popular
+*.Identifier
