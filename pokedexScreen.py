@@ -20,7 +20,7 @@ from database import lister_tous_les_pokemons
 class PokedexScreen(Screen):
     def __init__(self, **kwargs):
         super(PokedexScreen, self).__init__(**kwargs)
-       
+        
         layout = FloatLayout()
 
         # Dessiner un rectangle blanc en arrière-plan
@@ -76,10 +76,15 @@ class PokedexScreen(Screen):
     def on_texture(self, *args):
         self.update_header_position()
 
-    def load_pokemons(self):
-        print("######## POKEMON LOAD : ")
+
+    def load_pokemons(self): 
+        # Vider la grille avant de la remplir
+        self.grid.clear_widgets()
+
         pokemons = lister_tous_les_pokemons()
-        for pokemon in pokemons:
+        print("######## POKEMON LOAD : ")
+        print(pokemons)
+        for pokemon in reversed(pokemons):
             print(pokemon)
             print('\n')
             url = pokemon['image_path']
@@ -117,6 +122,7 @@ class PokedexScreen(Screen):
 
         # Planifier la mise à jour des positions des cellules après le chargement
         Clock.schedule_once(self.update_cell_positions, 0)
+
 
     def update_cell_positions(self, dt):
         for cell in self.grid.children:

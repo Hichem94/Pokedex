@@ -18,6 +18,7 @@ from musicWidget import MusicWidget
 
 # Import de mes fichiers
 from type_colors import TYPE_COLORS
+from musicWidget import MusicWidget
 
 class PokemonDetailsPage(Screen):
     def __init__(self, **kwargs):
@@ -159,8 +160,8 @@ class PokemonDetailsPage(Screen):
         self.scroll_layout.add_widget(self.name_label)
 
         # Crie du pokemon
-        # self.pokemon_cry = MusicWidget(pokemon_data['cries'])
-        # self.scroll_layout.add_widget(self.pokemon_cry)
+        self.pokemon_cry = MusicWidget(pokemon_data['pokedex_number'])
+        self.scroll_layout.add_widget(self.pokemon_cry)
 
     def update_header_position(self):
         if self.background_top:

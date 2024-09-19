@@ -11,6 +11,7 @@ def get_pokemon_info(name):
 
     # Extraire les informations souhaitées
         nom = data['name']
+        pokedex_number = data['id']
         taille = data['height']
         poids = data['weight']
         #Pour la catégorie
@@ -44,6 +45,7 @@ def get_pokemon_info(name):
 
         pokemon_info = {
             'nom': nom,
+            'pokedex_number': pokedex_number,
             'taille': taille,
             'poids': poids,
             'categorie': categorie,
@@ -59,8 +61,3 @@ def get_pokemon_info(name):
     except:
         print('No pokemon with name {name}')
         return None
-
-
-# pikachu_info = get_pokemon_info('gloom')
-# print(pikachu_info)
-# https://img.pokemondb.net/sprites/scarlet-violet/normal/bulbasaur.png

@@ -11,7 +11,7 @@ pygame.mixer.init()
 
 class MusicWidget(BoxLayout):
     
-    def __init__(self, sound_url, **kwargs):
+    def __init__(self, pokedex_number, **kwargs):
         super().__init__(**kwargs)
         self.orientation = 'vertical'
         self.playing = False  # To track if music is playing or paused
@@ -19,8 +19,8 @@ class MusicWidget(BoxLayout):
         self.music_length = 0  # Store the length of the music
         self.music_position = 0  # Current position in milliseconds
         self.slider = None  # Reference to the slider widget
-        self.sound_url = sound_url
-        self.temp_sound_path = 'ressources/pokemonCries/' + sound_url.split('/')[9].split('.')[0] + '.wav'  # Path to save the temporary sound file
+        self.pokedex_number = pokedex_number
+        self.temp_sound_path = 'ressources/pokemonCries/' + str(pokedex_number) + '.wav'  # Path to save the temporary sound file
 
         self.build()
 
@@ -50,7 +50,7 @@ class MusicWidget(BoxLayout):
     # def download_sound(self):
     #     try:
     #         print("Downloading sound file...")
-    #         response = requests.get(self.sound_url)
+    #         response = requests.get(self.pokedex_number)
     #         with open(self.temp_sound_path, 'wb') as f:
     #             f.write(response.content)
     #     except Exception as e:

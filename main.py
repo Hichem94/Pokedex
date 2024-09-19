@@ -133,6 +133,7 @@ class MainApp(App):
                     
                 # Effectuer la prédiction
                 pokemon_predicted = make_prediction(self.model, img_path)
+                print(pokemon_predicted)
                 if pokemon_predicted is None:
                     print("Erreur lors de la prédiction.")
                     os.remove(img_path)
@@ -140,12 +141,14 @@ class MainApp(App):
                 
                 # Récupérer les informations sur le Pokémon
                 self.pokemon_info = get_pokemon_info(pokemon_predicted)
+                print(self.pokemon_info)
                 if self.pokemon_info is None:
                     print("Erreur lors de la récupération des informations sur le Pokémon.")
                     os.remove(img_path)
                     return
                 
                 ajouter_pokemon(self.pokemon_info)
+                
                 
                 print("Informations sur le Pokémon récupérées.")
                 
@@ -160,7 +163,7 @@ class MainApp(App):
 
                 # Accéder à l'écran Pokedex et lui transmettre les infos du Pokémon
                 pokedex_screen = self.sm.get_screen('pokedex')
-                #pokedex_screen.update_pokemon_info(self.pokemon_info)
+                pokedex_screen.load_pokemons()
 
                 # Passer à l'écran Pokedex
                 self.switch_screen(self.sm, 'pokedex')
