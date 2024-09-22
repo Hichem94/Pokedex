@@ -24,3 +24,7 @@ Attrapez-les tous !
 ## A faire
 
 Visualiser les Statistiques : Obtenez des graphiques des statistiques de chaque Pokémon attrapés.
+
+## Remerciements
+
+Cette application Pokedex a été inspirée graphiquement par le travail de Adrian Twarog (https://www.youtube.com/@AdrianTwarog)
