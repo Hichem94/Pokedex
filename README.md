@@ -20,7 +20,7 @@ Sauvegarde automatique : Chaque Pokémon capturé est enregistré dans votre Pok
 
 Attrapez-les tous !
 
-<img src="/ressources/imgs/git_home.jpg" width="200" height="400" /> <img src="/ressources/imgs/git_camera.jpg" width="300" height="240"/><img src="/ressources/imgs/git_pokedex.jpg" width="300" height="240"/><img src="/ressources/imgs/git_profil.jpg" width="300" height="240"/>
+<img src="/ressources/imgs/git_home.jpg" width="200" height="400" /> <img src="/ressources/imgs/git_camera.jpg" width="200" height="400"/><img src="/ressources/imgs/git_pokedex.jpg" width="200" height="400"/><img src="/ressources/imgs/git_profil.jpg" width="200" height="400"/>
 
 
 ## Le modèle
