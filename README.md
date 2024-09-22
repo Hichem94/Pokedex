@@ -2,9 +2,6 @@
 Pokedex
 
 [![Language](https://img.shields.io/badge/language-python-blue.svg?style=flat)](https://www.python.org)
-[![Module](https://img.shields.io/badge/module-pygame-brightgreen.svg?style=flat)](http://www.pygame.org/news.html)
-[![Module](https://img.shields.io/badge/module-kivy-brightgreen.svg?style=flat)](https://kivy.org/)
-[![Module](https://img.shields.io/badge/module-tensorflow-brightgreen.svg?style=flat)](https://www.tensorflow.org/?hl=fr)
 [![Modules](https://img.shields.io/badge/modules-pygame%2C%20kivy%2C%20tensorflow-brightgreen.svg?style=flat)](https://kivy.org/)
 [![Release](https://img.shields.io/badge/release-v1.0-orange.svg?style=flat)](https://github.com/Hichem94/Pokedex)
 
