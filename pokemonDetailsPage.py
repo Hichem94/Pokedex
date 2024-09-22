@@ -68,7 +68,7 @@ class PokemonDetailsPage(Screen):
     def download_image(self, pokemon_data):
         try:
             # Télécharger l'image
-            url = pokemon_data['image_path2']
+            url = pokemon_data['image_path']
             response = requests.get(url)
             if response.status_code == 200:
                 # Convertir l'image en texture

@@ -25,8 +25,8 @@ def get_pokemon_info(name):
         else:
             categorie = "No info"
         types = [type_info['type']['name'] for type_info in data['types']]
-        image_path  = "https://img.pokemondb.net/sprites/scarlet-violet/normal/" + str(name).lower() + ".png"
-        image_path2 = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + str(pokedex_number) + ".png"
+        image_path2  = "https://img.pokemondb.net/sprites/scarlet-violet/normal/" + str(name).lower() + ".png"
+        image_path = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + str(pokedex_number) + ".png"
         stats = data['stats']
         pv = next(stat['base_stat'] for stat in stats if stat['stat']['name'] == 'hp')
         attaque = next(stat['base_stat'] for stat in stats if stat['stat']['name'] == 'attack')

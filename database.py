@@ -175,3 +175,20 @@ def lister_un_pokemon(pokemon_name):
     
     conn.close()
     return pokemon
+
+
+def is_pokemon_in_pokedex(pokedex_number):
+    conn = sqlite3.connect('pokedex.db')
+    cursor = conn.cursor()
+
+    res = False
+    # Utilisation de paramètres de requête pour éviter l'injection SQL
+    cursor.execute("SELECT pokedex_number\
+                    FROM mypokemons\
+                    WHERE pokedex_number=?", (pokedex_number,))
+    
+    if cursor.fetchone():
+        res = True
+    
+    conn.close()
+    return res

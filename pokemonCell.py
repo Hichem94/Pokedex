@@ -22,12 +22,6 @@ class PokemonCell(FloatLayout):
         self.bg_color = get_color_from_hex(bg_color_hex)
 
 
-        print("SIZE CELLULE : ", self.size)
-        print("SIZE WIDTH : ", self.width)
-        print("SIZE HEIGHT : ", self.height)
-        print("POS CELLULE : ", self.pos)
-        print("POSITION IN GRID : ", self.position_in_grid)
-
         # Créer le fond
         with self.canvas.before:
             Color(*self.bg_color)
@@ -43,7 +37,7 @@ class PokemonCell(FloatLayout):
                 allow_stretch=True, keep_ratio=True,
                 size_hint=(None, None),
                 size=(self.width * 0.2, self.height * 0.2),
-                pos_hint={'center_x': 0.25, 'center_y': 0.5 - 0.15 * i}
+                pos_hint={'center_x': 0.25, 'center_y': 0.5 - 0.10 * i}
             )
             self.icones.append(image)
 
@@ -56,7 +50,7 @@ class PokemonCell(FloatLayout):
             allow_stretch=True, keep_ratio=True,
             size_hint=(None, None),
             size=(self.width * 1.5, self.height * 1.5),
-            pos_hint={'center_x': 0.75, 'center_y': 0.6}
+            pos_hint={'center_x': 0.75, 'center_y': 0.45}
         )
         self.add_widget(self.pokemon_image)
 
@@ -105,14 +99,14 @@ class PokemonCell(FloatLayout):
         print("POSITION IN GRID : ", self.position_in_grid)
         
         # Mettre à jour la taille et la position de l'image
-        self.pokemon_image.size = (self.width * 1.1, self.height * 1.1)
-        self.pokemon_image.pos = (self.x + self.width * 0.2, self.y + self.height * 0.2)
+        self.pokemon_image.size = (self.width , self.height)
+        self.pokemon_image.pos = (self.x + self.width * 0.2, self.y)
 
         # Mettre à jour la taille et la position des icones de types
         i = 0
         for icon in self.icones:
             icon.size = (self.width * 0.4, self.height * 0.4)
-            icon.pos_hint={'center_x': 0.25, 'center_y': 0.5 - 0.18 * i}
+            icon.pos_hint={'center_x': 0.25, 'center_y': 0.5 - 0.15 * i}
             i+=1
 
         # Assurez-vous que le bouton est bien positionné

@@ -165,7 +165,9 @@ class MainApp(App):
                 # Accéder à l'écran Pokedex et lui transmettre les infos du Pokémon
                 pokedex_screen = self.sm.get_screen('pokedex')
                 pokedex_screen.load_pokemons()
-                #pokedex_screen.update_cell_positions(None)
+                
+                profil_screen = self.sm.get_screen('profil')
+                profil_screen.afficher_les_images()
 
                 # Passer à l'écran Pokedex
                 self.switch_screen(self.sm, 'pokedex')
