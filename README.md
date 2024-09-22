@@ -23,7 +23,7 @@ Attrapez-les tous !
 
 ## Le modèle
 
-Le modèle de reconnaissance des Pokémon a été développé avec TensorFlow et entraîné sur les images des 151 Pokémon de la première génération, disponibles dans le dossier dataset. Je me suis basé sur un tutoriel que vous pouvez consulter ici : (https://www.tensorflow.org/tutorials/images/classification?hl=fr).
+Le modèle de reconnaissance des Pokémon a été développé avec TensorFlow et entraîné sur les images des 151 Pokémon de la première génération, disponibles dans le dossier dataset. Je me suis basé sur un tutoriel que vous pouvez consulter ici : [Tutoriel Tensorflow](https://www.tensorflow.org/tutorials/images/classification?hl=fr).
 
 
 ## Comment jouer
