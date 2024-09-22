@@ -21,9 +21,19 @@ Sauvegarde automatique : Chaque Pokémon capturé est enregistré dans votre Pok
 Attrapez-les tous !
 
 
+
+
 ## Le modèle
 
 Le modèle de reconnaissance des Pokémon a été développé avec TensorFlow et entraîné sur les images des 151 Pokémon de la première génération, disponibles dans le dossier dataset. Je me suis basé sur un tutoriel que vous pouvez consulter ici : [Tutoriel Tensorflow](https://www.tensorflow.org/tutorials/images/classification?hl=fr).
+
+## Performance
+
+Ajouter le tableau
+
+## Difficultés
+
+Bien que la précision du modèle soit satisfaisante (précision > 0,9), j'ai constaté que l'utilisation de l'appareil photo posait problème. En effet, même lorsque je prends en photo une image du dataset, le Pokémon prédit par le modèle n'est souvent pas correct. En revanche, lorsque je passe la même image au modèle via la ligne de commande, j'obtiens le bon résultat.
 
 
 ## Comment jouer
