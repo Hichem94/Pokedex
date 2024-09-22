@@ -65,15 +65,24 @@ class PokemonDetailsPage(Screen):
         bg_color_hex = TYPE_COLORS.get(pokemon_type, '#FFFFFF')  # Utiliser une couleur par défaut
         self.bg_color.rgba = get_color_from_hex(bg_color_hex)  # Mettre à jour la couleur du fond arrondi
 
-    def download_image(self, url):
+    def download_image(self, pokemon_data):
         try:
             # Télécharger l'image
+            url = pokemon_data['image_path2']
             response = requests.get(url)
-            # Convertir l'image en texture
-            image_data = BytesIO(response.content)
-            pil_image = PILImage.open(image_data).convert('RGBA')
-            pil_image = pil_image.transpose(PILImage.FLIP_TOP_BOTTOM)  # Inverser si nécessaire
-
+            if response.status_code == 200:
+                # Convertir l'image en texture
+                image_data = BytesIO(response.content)
+                pil_image = PILImage.open(image_data).convert('RGBA')
+                pil_image = pil_image.transpose(PILImage.FLIP_TOP_BOTTOM)  # Inverser si nécessaire
+            else:
+                url = pokemon_data['image_path2']
+                response = requests.get(url)
+                # Convertir l'image en texture
+                image_data = BytesIO(response.content)
+                pil_image = PILImage.open(image_data).convert('RGBA')
+                pil_image = pil_image.transpose(PILImage.FLIP_TOP_BOTTOM)  # Inverser si nécessaire
+                
             image_np = np.array(pil_image)
 
             # Créer une texture Kivy
@@ -82,6 +91,7 @@ class PokemonDetailsPage(Screen):
 
             # Créer une image Kivy avec la texture
             image_downloaded = Image(texture=texture, allow_stretch=True, keep_ratio=False, size=(150, 150))
+        
         except Exception as e:
             print(f"Error fetching image: {e}")
             image_downloaded = Image(source='ressources/imgs/hyperball.png', size=(50, 50))
@@ -138,7 +148,7 @@ class PokemonDetailsPage(Screen):
         #     self.scroll_layout.add_widget(self.diagram_image)
 
         # Télécharger et afficher l'image du Pokémon
-        self.pokemon_img = self.download_image(pokemon_data['image_path'])
+        self.pokemon_img = self.download_image(pokemon_data)
         self.pokemon_img.keep_ratio = True
         self.pokemon_img.size_hint = (None, None)
         image_size = min(Window.width * 0.6, Window.height * 0.6)  # Taille maximale de l'image
@@ -153,8 +163,8 @@ class PokemonDetailsPage(Screen):
             color=(1, 1, 1, 1),
             font_name='ressources/fonts/police.ttf',
             size_hint=(None, None),  # Désactive la taille automatique
-            size=(self.scroll_layout.width * 0.8, self.scroll_layout.height * 0.2),  # Ajustez la largeur et la hauteur du label
-            pos_hint={'center_x': 0.5, 'center_y': 0.4},  # Centre le label
+            #size=(self.scroll_layout.width * 0.8, self.scroll_layout.height * 0.2),  # Ajustez la largeur et la hauteur du label
+            pos_hint={'center_x': 0.5, 'center_y': 0.6},  # Centre le label
             bold=True
         )
         self.scroll_layout.add_widget(self.name_label)
@@ -178,6 +188,26 @@ class PokemonDetailsPage(Screen):
             image_size = min(Window.width * 0.6, Window.height * 0.6)
             self.pokemon_img.size = (image_size, image_size)
 
+        if self.name_label:
+            # Ajuster la taille et la position du label nom
+            self.name_label.size = (Window.width * 0.8, Window.height*0.1)  # Ajuster la largeur et la hauteur du label
+            self.name_label.pos = (Window.width * 0.1, Window.height * 0.7)  # Ajuster la position du label
+
+        if self.pokemon_cry and self.name_label:
+            # Désactiver les size_hint pour le bouton play
+            self.pokemon_cry.play_button.size_hint = (None, None)
+            self.pokemon_cry.play_button.size = (Window.width * 0.2, Window.height * 0.05)
+
+            # Calculer la position Y pour placer le bouton en dessous du label
+            button_x_centered = (Window.width - self.pokemon_cry.play_button.width) / 2  # Centrer le bouton horizontalement
+            label_bottom_y = self.name_label.pos[1] - self.name_label.height  # Obtenir la position Y du bas du label
+
+            # Placer le bouton juste en dessous du label avec un espacement
+            self.pokemon_cry.play_button.pos = (button_x_centered, label_bottom_y - self.pokemon_cry.play_button.height - 20)
+
+        print("Label Position: ", self.name_label.pos)
+        print("Button Position: ", self.pokemon_cry.play_button.pos)
+
 
 
     def on_size(self, *args):
@@ -189,32 +219,11 @@ class PokemonDetailsPage(Screen):
 
     def on_window_resize(self, instance, width, height):
         # Ajuster les éléments en fonction de la taille de la fenêtre
-
-        if hasattr(self, 'bg_rect'):
-            self.bg_rect.size = (width, height)
-
-        if hasattr(self, 'rect'):
-            self.rect.size = (width - 50, height - 150)
-            self.rect.pos = ((width - self.rect.size[0]) / 2, 0)
-
         if hasattr(self, 'diagram_image'):
             self.diagram_image.size = (width * 0.8, width * 0.8)
             self.diagram_image.pos = ((width - self.diagram_image.size[0]) / 2, height - self.diagram_image.size[1] - 80)
 
-        if hasattr(self, 'audio_slider'):
-            # Ajuster la taille et la position du slider audio
-            self.audio_slider.size = (width / 2.5, 40)  # Ajuster la taille du slider
-            self.audio_slider.pos = (width / 2 - self.audio_slider.size[0] / 2, height * 0.1)  # Ajuster la position du slider
-
-        if hasattr(self, 'play_button'):
-            # Ajuster la position du bouton play/pause
-            self.play_button.size = (100, 50)
-            self.play_button.pos = (width / 2 - self.play_button.size[0] / 2, height * 0.05)  # Ajuster la position du bouton
-
-        if hasattr(self, 'name_label'):
-                # Ajuster la taille et la position du label nom
-                self.name_label.size = (width * 0.8, height * 0.2)  # Ajuster la largeur et la hauteur du label
-                self.name_label.pos = (width * 0.1, height * 0.7)  # Ajuster la position du label
+        self.update_header_position()
 
     def on_leave(self, *args):
         # Vider le BoxLayout quand la page est quittée

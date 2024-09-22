@@ -47,14 +47,6 @@ class MusicWidget(BoxLayout):
         # Schedule the update of the slider
         Clock.schedule_interval(self.update_slider, 0.1)
 
-    # def download_sound(self):
-    #     try:
-    #         print("Downloading sound file...")
-    #         response = requests.get(self.pokedex_number)
-    #         with open(self.temp_sound_path, 'wb') as f:
-    #             f.write(response.content)
-    #     except Exception as e:
-    #         print(f"Error fetching sound: {e}")
 
     def on_click(self, instance):
         if not self.playing and not self.paused:

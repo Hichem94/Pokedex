@@ -52,11 +52,11 @@ class PokemonCell(FloatLayout):
 
         # Ajouter l'image du Pokémon
         self.pokemon_image = Image(
-            source=self.pokemon_data.get('image_path', ''), 
+            source=self.pokemon_data.get('image_path', 'image_path2'), 
             allow_stretch=True, keep_ratio=True,
             size_hint=(None, None),
-            size=(self.width * 1.6, self.height * 1.6),
-            pos_hint={'center_x': 0.75, 'center_y': 0.7}
+            size=(self.width * 1.5, self.height * 1.5),
+            pos_hint={'center_x': 0.75, 'center_y': 0.6}
         )
         self.add_widget(self.pokemon_image)
 
@@ -76,11 +76,12 @@ class PokemonCell(FloatLayout):
         self.clickable_area = Button(size_hint=(None, None), background_color=(0, 0, 0, 0))
         self.clickable_area.bind(on_release=self.on_cell_click)
         self.add_widget(self.clickable_area)
+        
 
         # Planifier la mise à jour après l'initialisation
         # Mettre à jour le fond et les widgets lors du redimensionnement
         self.bind(size=self.update_bg, pos=self.update_bg)
-        self.bind(size=self.update_widgets)
+        self.bind(size=self.update_widgets, pos=self.update_widgets)
         Clock.schedule_once(self.update_widgets, 0)
 
 
@@ -94,11 +95,17 @@ class PokemonCell(FloatLayout):
 
     def update_widgets(self, *args):
         # Mettre à jour la taille et la position du label
-        self.label.size = (self.width * 1.3, self.height * 1.3) 
-        self.label.pos  = (self.x-10, self.y+self.height/2.8)
+        self.label.size = (self.width * 1.3, self.height * 1.3)
+        self.label.pos  = (self.x-30, self.y + self.height/2.5)
+        print("SIZE CELLULE : ", self.size)
+        print("SIZE WIDTH : ", self.width)
+        print("SIZE HEIGHT : ", self.height)
+        print("POS CELLULE : ", self.pos)
+        print("POS LABEL : ", self.label.pos)
+        print("POSITION IN GRID : ", self.position_in_grid)
         
         # Mettre à jour la taille et la position de l'image
-        self.pokemon_image.size = (self.width * 1.3, self.height * 1.3)
+        self.pokemon_image.size = (self.width * 1.1, self.height * 1.1)
         self.pokemon_image.pos = (self.x + self.width * 0.2, self.y + self.height * 0.2)
 
         # Mettre à jour la taille et la position des icones de types

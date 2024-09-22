@@ -36,12 +36,12 @@ class PokedexScreen(Screen):
         layout.add_widget(self.background_top)
         
         # Créer un ScrollView pour contenir la grille des Pokémons
-        self.scroll_view = ScrollView(size_hint=(1, 0.78), pos_hint={'x': 0, 'y': 0.035})
+        self.scroll_view = ScrollView(size_hint=(1, 0.80), pos_hint={'x': 0, 'y': 0.035})
         
         # Créer la grille pour afficher les Pokémons
         self.grid = GridLayout(
             cols=2,
-            padding=[20, 20, 20, 20],
+            padding=[20, 20, 20, 65],
             spacing=[15, 15],
             size_hint_y=None
         )
@@ -103,13 +103,12 @@ class PokedexScreen(Screen):
         self.grid.clear_widgets()
 
         pokemons = lister_tous_les_pokemons()
-        print("######## POKEMON LOAD : ")
-        print(pokemons)
-        for pokemon in reversed(pokemons):
+        #print("######## POKEMON LOAD : ")
+        #print(pokemons)
+        for pokemon in pokemons:
             print(pokemon)
             print('\n')
             url = pokemon['image_path']
-
             try:
                 # Télécharger l'image
                 response = requests.get(url)
@@ -118,15 +117,23 @@ class PokedexScreen(Screen):
                     image_data = BytesIO(response.content)
                     pil_image = PILImage.open(image_data).convert('RGBA')
                     pil_image = pil_image.transpose(PILImage.FLIP_TOP_BOTTOM)  # Inverser si nécessaire
+                else:
+                    url = pokemon['image_path2']
+                    response = requests.get(url)
+                    # Convertir l'image en texture
+                    image_data = BytesIO(response.content)
+                    pil_image = PILImage.open(image_data).convert('RGBA')
+                    pil_image = pil_image.transpose(PILImage.FLIP_TOP_BOTTOM)  # Inverser si nécessaire
+                    
+                image_np = np.array(pil_image)
 
-                    image_np = np.array(pil_image)
+                # Créer une texture Kivy
+                texture = Texture.create(size=(image_np.shape[1], image_np.shape[0]), colorfmt='rgba')
+                texture.blit_buffer(image_np.flatten(), bufferfmt='ubyte', colorfmt='rgba')
 
-                    # Créer une texture Kivy
-                    texture = Texture.create(size=(image_np.shape[1], image_np.shape[0]), colorfmt='rgba')
-                    texture.blit_buffer(image_np.flatten(), bufferfmt='ubyte', colorfmt='rgba')
-
-                    # Créer une image Kivy avec la texture
-                    pokemon_cell_image = Image(texture=texture, allow_stretch=True, keep_ratio=False, size=(150, 150))
+                # Créer une image Kivy avec la texture
+                pokemon_cell_image = Image(texture=texture, allow_stretch=True, keep_ratio=False, size=(150, 150))
+            
             except Exception as e:
                 print(f"Error fetching image: {e}")
                 pokemon_cell_image = Image(source='ressources/imgs/hyperball.png', size=(100, 100))
@@ -140,17 +147,21 @@ class PokedexScreen(Screen):
                 on_click_callback=self.show_pokemon_info,
                 position_in_grid=(row, col, pos),
                 size_hint=(None, None),
-                size=(Window.width/4.5, 100)
+                size=(Window.width/2.3, 150)
             )
             pokemon_cell.pokemon_image.texture = pokemon_cell_image.texture  # Affecter la texture à la cellule
             self.grid.add_widget(pokemon_cell)
 
+        # Recalculer la taille de la grille
+        #self.grid.bind(minimum_height=self.grid.setter('height'))
         # Planifier la mise à jour des positions des cellules après le chargement
         Clock.schedule_once(self.update_cell_positions, 0)
 
 
+
     def update_cell_positions(self, dt):
         for cell in self.grid.children:
+            cell.size=(Window.width/2.3, 150)
             cell.update_widgets()
     
     def show_pokemon_info(self, pokemon_data):

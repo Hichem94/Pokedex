@@ -1,6 +1,7 @@
 import cv2
 import tempfile
 import os
+#os.environ["KIVY_NO_CONSOLELOG"] = "1"
 import time
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
@@ -133,7 +134,7 @@ class MainApp(App):
                     
                 # Effectuer la prédiction
                 pokemon_predicted = make_prediction(self.model, img_path)
-                print(pokemon_predicted)
+                print(" ####################### POKEMON PREDICTED : ", pokemon_predicted)
                 if pokemon_predicted is None:
                     print("Erreur lors de la prédiction.")
                     os.remove(img_path)
@@ -164,6 +165,7 @@ class MainApp(App):
                 # Accéder à l'écran Pokedex et lui transmettre les infos du Pokémon
                 pokedex_screen = self.sm.get_screen('pokedex')
                 pokedex_screen.load_pokemons()
+                #pokedex_screen.update_cell_positions(None)
 
                 # Passer à l'écran Pokedex
                 self.switch_screen(self.sm, 'pokedex')

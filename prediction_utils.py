@@ -49,7 +49,8 @@ def charge_model(model_path):
 #modele = load_model('pokedex.keras')
 
 # # Prediction
-# pokemon_predict = make_prediction(modele, 'tests/bulbi.jpg')
+#pokemon_predict = make_prediction(modele, 'dataset/Arcanine/0af612d6c81c4cf8bb346df0d1ee02ea.jpg')
+#print("POKEMON PREDICTED : ", pokemon_predict)
 
 # # Get pokemon infoz
 # pokemon_info = get_pokemon_info(pokemon_predict)

@@ -14,7 +14,7 @@ img_width  = 180
 def model_training():
     # Utilisation de 80% des images pour la formation et 20% pour la validation
     train_ds = tf.keras.utils.image_dataset_from_directory(
-        'dataset_popular',
+        'dataset',
         validation_split=0.2,
         subset="training",
         seed=123,
@@ -23,7 +23,7 @@ def model_training():
     )
 
     val_ds = tf.keras.utils.image_dataset_from_directory(
-        'dataset_popular',
+        'dataset',
         validation_split=0.2,
         subset="validation",
         seed=123,
@@ -70,7 +70,7 @@ def model_training():
                   metrics=['accuracy'])
 
     # Entraîner le modèle
-    epochs = 20
+    epochs = 100
     history = model.fit(
         train_ds,
         validation_data=val_ds,
@@ -110,5 +110,21 @@ def make_prediction(model, img_path):
 
     predictions = model.predict(img_array)
     score = tf.nn.softmax(predictions[0])
-    class_names = ['Bulbasaur', 'Charmander', 'Mewtwo', 'Pikachu', 'Squirtle']
+    class_names = [
+    'Abra', 'Aerodactyl', 'Alakazam', 'Arbok', 'Arcanine', 'Articuno', 'Beedrill', 'Bellsprout', 'Blastoise', 
+    'Bulbasaur', 'Butterfree', 'Caterpie', 'Chansey', 'Charizard', 'Charmander', 'Charmeleon', 'Clefable', 'Clefairy', 
+    'Cloyster', 'Cubone', 'Dewgong', 'Diglett', 'Ditto', 'Dodrio', 'Doduo', 'Dragonair', 'Dragonite', 'Dratini', 
+    'Drowzee', 'Dugtrio', 'Eevee', 'Ekans', 'Electabuzz', 'Electrode', 'Exeggcute', 'Exeggutor', 'Farfetch\'d', 
+    'Fearow', 'Flareon', 'Gastly', 'Gengar', 'Geodude', 'Gloom', 'Golbat', 'Goldeen', 'Golduck', 'Golem', 
+    'Graveler', 'Grimer', 'Growlithe', 'Gyarados', 'Haunter', 'Hitmonchan', 'Hitmonlee', 'Horsea', 'Hypno', 'Ivysaur', 
+    'Jigglypuff', 'Jolteon', 'Jynx', 'Kabuto', 'Kabutops', 'Kadabra', 'Kakuna', 'Kangaskhan', 'Kingler', 'Koffing', 
+    'Krabby', 'Lapras', 'Lickitung', 'Machamp', 'Machoke', 'Machop', 'Magikarp', 'Magmar', 'Magnemite', 'Magneton', 
+    'Mankey', 'Marowak', 'Meowth', 'Metapod', 'Mew', 'Mewtwo', 'Moltres', 'Mr. Mime', 'Muk', 'Nidoking', 'Nidoqueen', 
+    'Nidoran♀', 'Nidoran♂', 'Nidorina', 'Nidorino', 'Ninetales', 'Oddish', 'Omanyte', 'Omastar', 'Onix', 'Paras', 
+    'Parasect', 'Persian', 'Pidgeot', 'Pidgeotto', 'Pidgey', 'Pikachu', 'Pinsir', 'Poliwag', 'Poliwhirl', 'Poliwrath', 
+    'Ponyta', 'Porygon', 'Primeape', 'Psyduck', 'Raichu', 'Rapidash', 'Raticate', 'Rattata', 'Rhydon', 'Rhyhorn', 
+    'Sandshrew', 'Sandslash', 'Scyther', 'Seadra', 'Seaking', 'Seel', 'Shellder', 'Slowbro', 'Slowpoke', 'Snorlax', 
+    'Spearow', 'Squirtle', 'Starmie', 'Staryu', 'Tangela', 'Tauros', 'Tentacool', 'Tentacruel', 'Vaporeon', 
+    'Venomoth', 'Venonat', 'Venusaur', 'Victreebel', 'Vileplume', 'Voltorb', 'Vulpix', 'Wartortle', 'Weepinbell', 
+    'Weezing', 'Wigglytuff', 'Zapdos', 'Zubat']
     return class_names[np.argmax(score)]
