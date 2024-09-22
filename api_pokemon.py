@@ -11,6 +11,7 @@ def get_pokemon_info(name):
 
     # Extraire les informations souhaitées
         nom = data['name']
+        pokedex_number = data['id']
         taille = data['height']
         poids = data['weight']
         #Pour la catégorie
@@ -24,7 +25,8 @@ def get_pokemon_info(name):
         else:
             categorie = "No info"
         types = [type_info['type']['name'] for type_info in data['types']]
-        image_path = "https://img.pokemondb.net/sprites/scarlet-violet/normal/" + str(name).lower() + ".png"
+        image_path2  = "https://img.pokemondb.net/sprites/scarlet-violet/normal/" + str(name).lower() + ".png"
+        image_path = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" + str(pokedex_number) + ".png"
         stats = data['stats']
         pv = next(stat['base_stat'] for stat in stats if stat['stat']['name'] == 'hp')
         attaque = next(stat['base_stat'] for stat in stats if stat['stat']['name'] == 'attack')
@@ -44,23 +46,20 @@ def get_pokemon_info(name):
 
         pokemon_info = {
             'nom': nom,
+            'pokedex_number': pokedex_number,
             'taille': taille,
             'poids': poids,
             'categorie': categorie,
             'types': types,
             'image_path': image_path,
+            'image_path2': image_path2,
             'stats': stats_b
         }
-        print("############### POKEMON_INFO ####################\n")
-        print("\n")
-        print(pokemon_info)
+        # print("############### POKEMON_INFO ####################\n")
+        # print("\n")
+        # print(pokemon_info)
         return pokemon_info
 
     except:
         print('No pokemon with name {name}')
         return None
-
-
-# pikachu_info = get_pokemon_info('gloom')
-# print(pikachu_info)
-# https://img.pokemondb.net/sprites/scarlet-violet/normal/bulbasaur.png

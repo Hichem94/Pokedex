@@ -17,7 +17,9 @@ class HomeScreen(Screen):
         layout.add_widget(self.background_down)
 
         # Ajouter l'image d'en-tête
-        self.background_top = Image(source="ressources/imgs/header.png", allow_stretch=True, keep_ratio=False,
+        self.background_top = Image(source="ressources/imgs/header.png", 
+                                    allow_stretch=True, 
+                                    keep_ratio=False,
                                     size_hint=(1, None))
         layout.add_widget(self.background_top)
 

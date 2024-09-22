@@ -7,12 +7,13 @@ cursor = conn.cursor()
 # Créer la table 'mypokemons'
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS mypokemons (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom TEXT,
+        nom TEXT PRIMARY KEY,
+        pokedex_number INT,
         taille INTEGER,
         categorie TEXT,
         poids INTEGER,
         image_path TEXT,
+        image_path2 TEXT,
         pv INTEGER,
         attaque INTEGER,
         defense INTEGER,
@@ -84,10 +85,10 @@ conn.commit()
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS pokemon_type (
-    id_pokemon INT,
+    id_pokemon TEXT,
     id_type INT,
     PRIMARY KEY (id_pokemon, id_type),
-    FOREIGN KEY (id_pokemon) REFERENCES pokemon(id_pokemon),
+    FOREIGN KEY (id_pokemon) REFERENCES mypokemons(nom),
     FOREIGN KEY (id_type) REFERENCES type(id_type)
     );
 ''')
@@ -101,40 +102,61 @@ def ajouter_pokemon(pokemon_info):
     """pokemon_info est un dictionnaire"""
     conn = sqlite3.connect('pokedex.db')
     cursor = conn.cursor()
-    
-    cursor.execute("INSERT INTO mypokemons (nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse)\
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                   (pokemon_info['nom'], pokemon_info['taille'], pokemon_info['categorie'], pokemon_info['poids'],
-                    pokemon_info['image_path'], pokemon_info['stats']['pv'], pokemon_info['stats']['attaque'], pokemon_info['stats']['defense'],
-                    pokemon_info['stats']['attaque_speciale'], pokemon_info['stats']['defense_speciale'], pokemon_info['stats']['vitesse'],)
-                   )
-    conn.commit()
-    pokemon_id = cursor.lastrowid
+    try:
+        cursor.execute("INSERT INTO mypokemons (nom, pokedex_number, taille, categorie, poids, image_path, image_path2, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse)\
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    (pokemon_info['nom'], pokemon_info['pokedex_number'], pokemon_info['taille'], pokemon_info['categorie'], pokemon_info['poids'],
+                        pokemon_info['image_path'], pokemon_info['image_path2'], pokemon_info['stats']['pv'], pokemon_info['stats']['attaque'], pokemon_info['stats']['defense'],
+                        pokemon_info['stats']['attaque_speciale'], pokemon_info['stats']['defense_speciale'], pokemon_info['stats']['vitesse'],)
+                    )
+        conn.commit()
+        pokemon_id = pokemon_info['nom']
 
-    # Récupérer les ID de/des type(s) du pokemon
-    types_du_pokemon = tuple(pokemon_info['types'])
+        # Récupérer les ID de/des type(s) du pokemon
+        types_du_pokemon = tuple(pokemon_info['types'])
 
-    cursor.execute(f"SELECT id_type FROM type WHERE nom_type IN ({','.join('?' * len(types_du_pokemon))})", types_du_pokemon)
-    type_ids = [row[0] for row in cursor.fetchall()]
+        cursor.execute(f"SELECT id_type FROM type WHERE nom_type IN ({','.join('?' * len(types_du_pokemon))})", types_du_pokemon)
+        type_ids = [row[0] for row in cursor.fetchall()]
 
-    # Insertion des type-Pokémon
-    for type_id in type_ids:
-        cursor.execute("INSERT INTO pokemon_type (id_pokemon, id_type) VALUES (?, ?)", (pokemon_id, type_id))
-
-    conn.commit()
-    conn.close()
+        # Insertion des type-Pokémon
+        for type_id in type_ids:
+            cursor.execute("INSERT INTO pokemon_type (id_pokemon, id_type) VALUES (?, ?)", (pokemon_id, type_id))
+        
+        conn.commit()
+        conn.close()
+    except:
+        print("Pokemon déjà dans la base")
+        conn.commit()
+        conn.close()
 
 
 # Fonction pour lister tous les Pokémon
 def lister_tous_les_pokemons():
     conn = sqlite3.connect('pokedex.db')
     cursor = conn.cursor()
+    # Configurer le curseur pour utiliser sqlite3.Row
+    cursor.row_factory = sqlite3.Row
 
-    cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
-                    FROM mypokemons")
+    
+    cursor.execute("SELECT nom, pokedex_number, taille, categorie, poids, image_path, image_path2, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse,\
+                    GROUP_CONCAT(type.nom_type, ', ') AS types\
+                    FROM mypokemons\
+                    JOIN pokemon_type ON nom = id_pokemon\
+                    JOIN type ON type.id_type = pokemon_type.id_type\
+                    GROUP BY nom, taille, categorie, poids, image_path, image_path2, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse")
 
     conn.commit()
-    pokemons = cursor.fetchall()
+    rows = cursor.fetchall()
+    pokemons = [dict(row) for row in rows]
+
+
+    # Transformer le type en liste
+    #print("LISTER TOUS LES POKEMONS")
+    for pokemon in pokemons:
+        pokemon['types'] = pokemon['types'].split(',')
+        #print(pokemon)
+
+    
     conn.close()
     return pokemons
 
@@ -145,11 +167,28 @@ def lister_un_pokemon(pokemon_name):
     cursor = conn.cursor()
 
     # Utilisation de paramètres de requête pour éviter l'injection SQL
-    cursor.execute("SELECT nom, taille, categorie, poids, image_path, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
+    cursor.execute("SELECT nom, pokedex_number, taille, categorie, poids, image_path, image_path2, pv, attaque, defense, attaque_speciale, defense_speciale, vitesse\
                     FROM mypokemons\
                     WHERE nom=?", (pokemon_name,))
     
     pokemon = cursor.fetchall()
-
+    
     conn.close()
     return pokemon
+
+
+def is_pokemon_in_pokedex(pokedex_number):
+    conn = sqlite3.connect('pokedex.db')
+    cursor = conn.cursor()
+
+    res = False
+    # Utilisation de paramètres de requête pour éviter l'injection SQL
+    cursor.execute("SELECT pokedex_number\
+                    FROM mypokemons\
+                    WHERE pokedex_number=?", (pokedex_number,))
+    
+    if cursor.fetchone():
+        res = True
+    
+    conn.close()
+    return res

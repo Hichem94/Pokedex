@@ -1,6 +1,7 @@
 import cv2
 import tempfile
 import os
+#os.environ["KIVY_NO_CONSOLELOG"] = "1"
 import time
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
@@ -22,12 +23,6 @@ from profilScreen import ProfilScreen
 from api_pokemon import get_pokemon_info
 from prediction_utils import make_prediction, charge_model
 from database import *
-
-
-
-
-
-
 
 
 
@@ -97,7 +92,7 @@ class MainApp(App):
         nav_bar.add_widget(self.profil_button)
 
         # Ajouter la nav_bar au layout principal
-        layout.add_widget(nav_bar)
+        layout.add_widget(nav_bar)      
 
         # Ajouter un bouton global visible sur toutes les pages. Il permettra de prendre une photo sur la page camera
         self.capture_button = RoundButton(image_source="ressources/imgs/button_image.png", size=(100, 100))
@@ -139,6 +134,7 @@ class MainApp(App):
                     
                 # Effectuer la prédiction
                 pokemon_predicted = make_prediction(self.model, img_path)
+                print(" ####################### POKEMON PREDICTED : ", pokemon_predicted)
                 if pokemon_predicted is None:
                     print("Erreur lors de la prédiction.")
                     os.remove(img_path)
@@ -146,12 +142,14 @@ class MainApp(App):
                 
                 # Récupérer les informations sur le Pokémon
                 self.pokemon_info = get_pokemon_info(pokemon_predicted)
+                print(self.pokemon_info)
                 if self.pokemon_info is None:
                     print("Erreur lors de la récupération des informations sur le Pokémon.")
                     os.remove(img_path)
                     return
                 
                 ajouter_pokemon(self.pokemon_info)
+                
                 
                 print("Informations sur le Pokémon récupérées.")
                 
@@ -166,7 +164,10 @@ class MainApp(App):
 
                 # Accéder à l'écran Pokedex et lui transmettre les infos du Pokémon
                 pokedex_screen = self.sm.get_screen('pokedex')
-                pokedex_screen.update_pokemon_info(self.pokemon_info)
+                pokedex_screen.load_pokemons()
+                
+                profil_screen = self.sm.get_screen('profil')
+                profil_screen.afficher_les_images()
 
                 # Passer à l'écran Pokedex
                 self.switch_screen(self.sm, 'pokedex')

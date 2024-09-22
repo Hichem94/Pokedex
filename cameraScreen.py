@@ -54,11 +54,19 @@ class CameraScreen(Screen):
         # Planifier la mise à jour de la vue de la caméra
         Clock.schedule_interval(self.update, 1.0 / 30.0)
 
-    def on_window_resize(self, instance, width, height):
-        # Mettre à jour la taille et la position de l'image d'en-tête
-        self.background_top.size = (width, self.background_top.texture_size[1])
-        self.background_top.pos = (0, height - self.background_top.height)
+    def update_header_position(self):
+        if self.background_top:
+            self.background_top.size = (self.width, self.background_top.texture_size[1])
+            self.background_top.pos = (0, self.height - self.background_top.height)
 
+    def on_size(self, *args):
+        self.update_header_position()
+
+    def on_texture(self, *args):
+        self.update_header_position()
+
+
+    def on_window_resize(self, instance, width, height):
         # Mettre à jour la taille et la position de la vue de la caméra
         self.camera_view.size = (width * 0.8, height * 0.6)
         self.camera_view.pos = ((width - self.camera_view.width) / 2, (height - self.camera_view.height) / 2)
