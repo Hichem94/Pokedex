@@ -8,7 +8,7 @@ Pokedex
 ## A propos
 Bienvenue dans l'application Pokedex !
 
-Pokedex est une application interactive qui vous permet de capturer des Pokémon et de les sauvegarder dans votre propre Pokédex. Chaque fois que vous attrapez un Pokémon, il est ajouté à votre liste personnelle, vous permettant de suivre vos progrès et d'explorer l'univers fascinant des créatures de Pokémon.
+Pokedex est une application interactive qui vous permet de capturer des Pokémon et de les sauvegarder dans votre propre Pokédex. Chaque fois que vous attrapez un Pokémon, il est ajouté à votre liste personnelle, vous permettant de suivre vos progrès.
 
 Cette application vous permet de :
 
