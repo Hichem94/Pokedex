@@ -2,7 +2,7 @@
 Pokedex
 
 [![Language](https://img.shields.io/badge/language-python-blue.svg?style=flat)](https://www.python.org)
-[![Modules](https://img.shields.io/badge/modules-pygame%2C%20kivy%2C%20tensorflow-brightgreen.svg%2C%20sqlite3?style=flat)](https://kivy.org/)
+[![Modules](https://img.shields.io/badge/modules-pygame%2C%20kivy%2C%20tensorflow%2C%20sqlite3-brightgreen.svg)](https://kivy.org/)
 [![Release](https://img.shields.io/badge/release-v1.0-orange.svg?style=flat)](https://github.com/Hichem94/Pokedex)
 
 ## A propos
