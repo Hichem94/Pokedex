@@ -1,0 +1,7 @@
+tensorflow
+kivy
+pygame
+edge-tts
+opencv-python
+Pillow
+numpy
